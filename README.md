@@ -36,8 +36,8 @@ Transform any cooking video into a recipe you can actually cook. Scan cookbook p
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/your-org/recipesnap.git
-cd recipesnap
+git clone https://github.com/passionate-dev7/cookai.git
+cd cookai
 ```
 
 2. Install dependencies:
@@ -98,7 +98,7 @@ npx expo run:android
 ## Project Structure
 
 ```
-recipesnap/
+cookai/
 ├── app/                      # Expo Router screens
 │   ├── (auth)/              # Authentication screens
 │   ├── (tabs)/              # Main tab navigation
@@ -193,5 +193,5 @@ MIT License - see [LICENSE](LICENSE) for details.
 
 ## Support
 
-- Issues: [GitHub Issues](https://github.com/your-org/recipesnap/issues)
-- Email: support@recipesnap.app
+- Issues: [GitHub Issues](https://github.com/your-org/cookai/issues)
+- Email: support@cookai.app
