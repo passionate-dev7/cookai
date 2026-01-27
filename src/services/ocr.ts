@@ -100,7 +100,7 @@ If there's no recipe on the page or the image is unreadable, return:
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${apiKey}`,
-        'HTTP-Referer': 'https://recipesnap.app',
+        'HTTP-Referer': 'https://cookai.app',
         'X-Title': 'CookAI',
       },
       body: JSON.stringify({

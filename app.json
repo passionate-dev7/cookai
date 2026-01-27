@@ -1,11 +1,11 @@
 {
   "expo": {
     "name": "CookAI",
-    "slug": "recipesnap",
+    "slug": "cookai",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "recipesnap",
+    "scheme": "cookai",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "splash": {
@@ -15,7 +15,7 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.recipesnap.app",
+      "bundleIdentifier": "com.cookai.app",
       "infoPlist": {
         "NSCameraUsageDescription": "CookAI needs camera access to scan cookbook barcodes and recipe pages",
         "NSPhotoLibraryUsageDescription": "CookAI needs photo library access to import recipe images"
@@ -26,7 +26,7 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#F97316"
       },
-      "package": "com.recipesnap.app",
+      "package": "com.cookai.app",
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false
     },

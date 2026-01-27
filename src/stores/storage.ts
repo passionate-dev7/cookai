@@ -2,7 +2,7 @@ import { MMKV } from 'react-native-mmkv';
 import { StateStorage } from 'zustand/middleware';
 
 export const storage = new MMKV({
-  id: 'recipesnap-storage',
+  id: 'cookai-storage',
 });
 
 // Zustand persistence storage adapter

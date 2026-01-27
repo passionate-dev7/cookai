@@ -92,7 +92,7 @@ Return ONLY valid JSON in this exact format:
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${OPENROUTER_API_KEY}`,
-        "HTTP-Referer": "https://recipesnap.app",
+        "HTTP-Referer": "https://cookai.app",
         "X-Title": "CookAI",
       },
       body: JSON.stringify({
