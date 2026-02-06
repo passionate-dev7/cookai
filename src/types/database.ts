@@ -144,61 +144,76 @@ export interface Subscription {
 
 export interface Database {
   public: {
+    Views: Record<string, never>;
+    Functions: Record<string, never>;
+    Enums: Record<string, never>;
+    CompositeTypes: Record<string, never>;
     Tables: {
       profiles: {
         Row: Profile;
         Insert: Omit<Profile, 'created_at' | 'updated_at'>;
         Update: Partial<Omit<Profile, 'id' | 'created_at'>>;
+        Relationships: [];
       };
       cookbooks: {
         Row: Cookbook;
         Insert: Omit<Cookbook, 'id' | 'created_at' | 'updated_at'>;
         Update: Partial<Omit<Cookbook, 'id' | 'user_id' | 'created_at'>>;
+        Relationships: [];
       };
       recipes: {
         Row: Recipe;
         Insert: Omit<Recipe, 'id' | 'created_at' | 'updated_at'>;
         Update: Partial<Omit<Recipe, 'id' | 'user_id' | 'created_at'>>;
+        Relationships: [];
       };
       recipe_ingredients: {
         Row: RecipeIngredient;
         Insert: Omit<RecipeIngredient, 'id'>;
         Update: Partial<Omit<RecipeIngredient, 'id' | 'recipe_id'>>;
+        Relationships: [];
       };
       ingredients: {
         Row: Ingredient;
         Insert: Omit<Ingredient, 'id' | 'created_at'>;
         Update: Partial<Omit<Ingredient, 'id' | 'created_at'>>;
+        Relationships: [];
       };
       grocery_lists: {
         Row: GroceryList;
         Insert: Omit<GroceryList, 'id' | 'created_at' | 'updated_at'>;
         Update: Partial<Omit<GroceryList, 'id' | 'user_id' | 'created_at'>>;
+        Relationships: [];
       };
       grocery_items: {
         Row: GroceryItem;
         Insert: Omit<GroceryItem, 'id' | 'created_at'>;
         Update: Partial<Omit<GroceryItem, 'id' | 'grocery_list_id' | 'created_at'>>;
+        Relationships: [];
       };
       meal_plans: {
         Row: MealPlan;
         Insert: Omit<MealPlan, 'id' | 'created_at' | 'updated_at'>;
         Update: Partial<Omit<MealPlan, 'id' | 'user_id' | 'created_at'>>;
+        Relationships: [];
       };
       meal_plan_entries: {
         Row: MealPlanEntry;
         Insert: Omit<MealPlanEntry, 'id'>;
         Update: Partial<Omit<MealPlanEntry, 'id' | 'meal_plan_id'>>;
+        Relationships: [];
       };
       extraction_jobs: {
         Row: ExtractionJob;
         Insert: Omit<ExtractionJob, 'id' | 'created_at'>;
         Update: Partial<Omit<ExtractionJob, 'id' | 'user_id' | 'created_at'>>;
+        Relationships: [];
       };
       subscriptions: {
         Row: Subscription;
         Insert: Omit<Subscription, 'id' | 'created_at' | 'updated_at'>;
         Update: Partial<Omit<Subscription, 'id' | 'user_id' | 'created_at'>>;
+        Relationships: [];
       };
     };
   };
