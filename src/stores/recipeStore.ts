@@ -83,6 +83,10 @@ export const useRecipeStore = create<RecipeState>()(
       clearFilters: () => set({ filters: initialFilters, searchQuery: '' }),
 
       fetchRecipes: async () => {
+        // Skip if not authenticated
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) return;
+
         set({ isLoading: true });
         try {
           const { data, error } = await supabase
@@ -100,6 +104,10 @@ export const useRecipeStore = create<RecipeState>()(
       },
 
       fetchCookbooks: async () => {
+        // Skip if not authenticated
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) return;
+
         try {
           const { data, error } = await supabase
             .from('cookbooks')

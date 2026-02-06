@@ -255,6 +255,42 @@ export default function HomeScreen() {
           </View>
         )}
 
+        {/* Discover Community Recipes */}
+        <View style={{ paddingHorizontal: 20, marginBottom: 28 }}>
+          <Card
+            onPress={() => router.push('/discover')}
+            variant="outlined"
+            padding="md"
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              gap: 12,
+            }}
+          >
+            <View
+              style={{
+                width: 44,
+                height: 44,
+                borderRadius: 12,
+                backgroundColor: '#F0FDF4',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Ionicons name="globe-outline" size={22} color="#16A34A" />
+            </View>
+            <View style={{ flex: 1 }}>
+              <Text style={{ fontSize: 16, fontWeight: '600', color: '#1F2937' }}>
+                Discover Recipes
+              </Text>
+              <Text style={{ fontSize: 13, color: '#6B7280' }}>
+                Browse community recipe collection
+              </Text>
+            </View>
+            <Ionicons name="chevron-forward" size={20} color="#9CA3AF" />
+          </Card>
+        </View>
+
         {/* Empty State */}
         {recipes.length === 0 && (
           <View

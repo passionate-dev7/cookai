@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -6,19 +6,84 @@ import {
   TouchableOpacity,
   Alert,
   Linking,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useUserStore, useSubscriptionStore, useRecipeStore } from '@/src/stores';
-import { Card, Button } from '@/src/shared/components';
+import { Card, Button, Input } from '@/src/shared/components';
+import { signInWithEmail, signUpWithEmail } from '@/src/services/supabase';
 
 export default function ProfileScreen() {
   const router = useRouter();
-  const { profile, user, signOut } = useUserStore();
+  const { profile, user, isAuthenticated, signOut, initialize } = useUserStore();
   const { isPremium, restorePurchases, isLoading } = useSubscriptionStore();
-  const { recipes, cookbooks } = useRecipeStore();
+  const { recipes, cookbooks, fetchRecipes, fetchCookbooks } = useRecipeStore();
+
+  // Auth form state
+  const [authMode, setAuthMode] = useState<'signin' | 'signup'>('signin');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [fullName, setFullName] = useState('');
+  const [authLoading, setAuthLoading] = useState(false);
+  const [authError, setAuthError] = useState<string | null>(null);
+
+  const handleSignIn = async () => {
+    if (!email.trim() || !password.trim()) {
+      setAuthError('Please fill in all fields');
+      return;
+    }
+    setAuthLoading(true);
+    setAuthError(null);
+
+    try {
+      const { error } = await signInWithEmail(email.trim(), password);
+      if (error) {
+        setAuthError(error.message);
+      } else {
+        // Reinitialize the stores
+        await initialize();
+        await fetchRecipes();
+        await fetchCookbooks();
+        setEmail('');
+        setPassword('');
+      }
+    } catch (e) {
+      setAuthError('An unexpected error occurred');
+    } finally {
+      setAuthLoading(false);
+    }
+  };
+
+  const handleSignUp = async () => {
+    if (!email.trim() || !password.trim()) {
+      setAuthError('Please fill in all fields');
+      return;
+    }
+    if (password.length < 6) {
+      setAuthError('Password must be at least 6 characters');
+      return;
+    }
+    setAuthLoading(true);
+    setAuthError(null);
+
+    try {
+      const { error } = await signUpWithEmail(email.trim(), password, fullName.trim() || undefined);
+      if (error) {
+        setAuthError(error.message);
+      } else {
+        Alert.alert('Account Created', 'You can now sign in with your credentials.');
+        setAuthMode('signin');
+      }
+    } catch (e) {
+      setAuthError('An unexpected error occurred');
+    } finally {
+      setAuthLoading(false);
+    }
+  };
 
   const handleSignOut = () => {
     Alert.alert('Sign Out', 'Are you sure you want to sign out?', [
@@ -39,6 +104,126 @@ export default function ProfileScreen() {
       Alert.alert('No Purchases Found', 'We could not find any previous purchases to restore.');
     }
   };
+
+  // Show auth screen if not signed in
+  if (!isAuthenticated) {
+    return (
+      <SafeAreaView style={{ flex: 1, backgroundColor: '#FFFFFF' }} edges={['top', 'bottom']}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={{ flex: 1 }}
+        >
+          <ScrollView
+            style={{ flex: 1 }}
+            contentContainerStyle={{ padding: 20, paddingTop: 40 }}
+            keyboardShouldPersistTaps="handled"
+          >
+            {/* Logo/Icon */}
+            <View style={{ alignItems: 'center', marginBottom: 32 }}>
+              <View
+                style={{
+                  width: 80,
+                  height: 80,
+                  borderRadius: 20,
+                  backgroundColor: '#FFF7ED',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginBottom: 16,
+                }}
+              >
+                <Ionicons name="restaurant" size={36} color="#F97316" />
+              </View>
+              <Text style={{ fontSize: 24, fontWeight: '700', color: '#1F2937' }}>
+                {authMode === 'signin' ? 'Welcome Back' : 'Create Account'}
+              </Text>
+              <Text style={{ fontSize: 15, color: '#6B7280', marginTop: 8, textAlign: 'center' }}>
+                {authMode === 'signin'
+                  ? 'Sign in to sync your recipes across devices'
+                  : 'Join to save and sync your recipe collection'}
+              </Text>
+            </View>
+
+            {/* Auth Form */}
+            {authMode === 'signup' && (
+              <Input
+                label="Full Name"
+                value={fullName}
+                onChangeText={setFullName}
+                placeholder="Your name"
+                autoCapitalize="words"
+              />
+            )}
+
+            <Input
+              label="Email"
+              value={email}
+              onChangeText={(t) => { setEmail(t); setAuthError(null); }}
+              placeholder="you@example.com"
+              keyboardType="email-address"
+              autoCapitalize="none"
+              autoCorrect={false}
+            />
+
+            <Input
+              label="Password"
+              value={password}
+              onChangeText={(t) => { setPassword(t); setAuthError(null); }}
+              placeholder="Enter your password"
+              secureTextEntry
+            />
+
+            {authError && (
+              <View style={{
+                backgroundColor: '#FEF2F2',
+                borderRadius: 8,
+                padding: 12,
+                marginBottom: 16,
+                flexDirection: 'row',
+                alignItems: 'center',
+                gap: 8,
+              }}>
+                <Ionicons name="alert-circle" size={20} color="#EF4444" />
+                <Text style={{ fontSize: 14, color: '#DC2626', flex: 1 }}>{authError}</Text>
+              </View>
+            )}
+
+            <Button
+              title={authMode === 'signin' ? 'Sign In' : 'Create Account'}
+              onPress={authMode === 'signin' ? handleSignIn : handleSignUp}
+              loading={authLoading}
+              fullWidth
+              style={{ marginBottom: 16 }}
+            />
+
+            <TouchableOpacity
+              onPress={() => {
+                setAuthMode(authMode === 'signin' ? 'signup' : 'signin');
+                setAuthError(null);
+              }}
+              style={{ alignItems: 'center', padding: 12 }}
+            >
+              <Text style={{ fontSize: 15, color: '#6B7280' }}>
+                {authMode === 'signin' ? "Don't have an account? " : 'Already have an account? '}
+                <Text style={{ color: '#F97316', fontWeight: '600' }}>
+                  {authMode === 'signin' ? 'Sign Up' : 'Sign In'}
+                </Text>
+              </Text>
+            </TouchableOpacity>
+
+            {/* Skip */}
+            <TouchableOpacity
+              onPress={() => router.back()}
+              style={{ alignItems: 'center', padding: 12, marginTop: 8 }}
+            >
+              <Text style={{ fontSize: 14, color: '#9CA3AF' }}>
+                Continue without signing in
+              </Text>
+            </TouchableOpacity>
+          </ScrollView>
+        </KeyboardAvoidingView>
+      </SafeAreaView>
+    );
+  }
 
   const menuItems = [
     {

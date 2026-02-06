@@ -10,12 +10,13 @@ import {
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
-import { useGroceryStore } from '@/src/stores';
+import { useGroceryStore, useUserStore } from '@/src/stores';
 import { EmptyState, Button, Card, Input } from '@/src/shared/components';
 import { GroceryItem } from '@/src/types/database';
 
 export default function GroceryScreen() {
   const router = useRouter();
+  const { isAuthenticated } = useUserStore();
   const [refreshing, setRefreshing] = useState(false);
   const [newItemName, setNewItemName] = useState('');
   const [isAdding, setIsAdding] = useState(false);
@@ -175,6 +176,31 @@ export default function GroceryScreen() {
 
   const checkedCount = activeList?.items?.filter((i) => i.is_checked).length || 0;
   const totalCount = activeList?.items?.length || 0;
+
+  // Show sign-in prompt if not authenticated
+  if (!isAuthenticated) {
+    return (
+      <View style={{ flex: 1, backgroundColor: '#F9FAFB', justifyContent: 'center', alignItems: 'center', padding: 40 }}>
+        <View style={{
+          width: 80, height: 80, borderRadius: 40,
+          backgroundColor: '#FFF7ED', alignItems: 'center', justifyContent: 'center', marginBottom: 20,
+        }}>
+          <Ionicons name="cart-outline" size={36} color="#F97316" />
+        </View>
+        <Text style={{ fontSize: 20, fontWeight: '600', color: '#1F2937', textAlign: 'center', marginBottom: 8 }}>
+          Sign in to use Grocery Lists
+        </Text>
+        <Text style={{ fontSize: 15, color: '#6B7280', textAlign: 'center', lineHeight: 22, maxWidth: 280, marginBottom: 24 }}>
+          Create and sync grocery lists across your devices
+        </Text>
+        <Button
+          title="Sign In"
+          onPress={() => router.push('/(tabs)/profile')}
+          size="md"
+        />
+      </View>
+    );
+  }
 
   return (
     <View style={{ flex: 1, backgroundColor: '#F9FAFB' }}>

@@ -63,6 +63,13 @@ export const useGroceryStore = create<GroceryState>()(
       setIsLoading: (isLoading) => set({ isLoading }),
 
       fetchLists: async () => {
+        // Check if user is authenticated before fetching
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) {
+          // Not authenticated, skip fetching
+          return;
+        }
+
         set({ isLoading: true });
         try {
           const { data, error } = await supabase
