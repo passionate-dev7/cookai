@@ -104,6 +104,20 @@ export default function RootLayout() {
           }}
         />
         <Stack.Screen
+          name="(modals)/barcode-scanner"
+          options={{
+            presentation: 'fullScreenModal',
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="(modals)/ocr-scanner"
+          options={{
+            presentation: 'fullScreenModal',
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
           name="recipe/[id]"
           options={{
             headerShown: true,
@@ -119,6 +133,12 @@ export default function RootLayout() {
             headerTitle: '',
             headerBackTitle: 'Back',
             headerTintColor: '#F97316',
+          }}
+        />
+        <Stack.Screen
+          name="search"
+          options={{
+            headerShown: false,
           }}
         />
       </Stack>
