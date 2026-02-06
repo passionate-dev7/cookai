@@ -10,7 +10,7 @@ const OPENROUTER_API_KEY = process.env.EXPO_PUBLIC_OPENROUTER_API_KEY;
 // Available models via OpenRouter - choose based on tier/needs
 export const AVAILABLE_MODELS = {
   // Fast & cheap (good for free tier)
-  'claude-3-haiku': 'anthropic/claude-3-haiku',
+  'claude-3-haiku': 'anthropic/claude-3-haiku-20240307',
   'gpt-4o-mini': 'openai/gpt-4o-mini',
   'llama-3.1-8b': 'meta-llama/llama-3.1-8b-instruct',
   'gemini-flash': 'google/gemini-flash-1.5',
@@ -27,9 +27,9 @@ export const AVAILABLE_MODELS = {
 
 export type ModelKey = keyof typeof AVAILABLE_MODELS;
 
-// Default models for different tiers
+// Default models for different tiers - using gpt-4o-mini as it's reliable and cheap
 const DEFAULT_MODELS = {
-  free: 'anthropic/claude-3-haiku',
+  free: 'openai/gpt-4o-mini',
   premium: 'anthropic/claude-3.5-sonnet',
 };
 
@@ -126,6 +126,18 @@ async function getVideoTranscript(url: string, platform: SupportedPlatform): Pro
 }
 
 /**
+ * Extract JSON from a response that might contain text before/after the JSON
+ */
+function extractJsonFromResponse(text: string): string {
+  // Try to find JSON object in the response
+  const jsonMatch = text.match(/\{[\s\S]*\}/);
+  if (jsonMatch) {
+    return jsonMatch[0];
+  }
+  throw new Error('No valid JSON found in response');
+}
+
+/**
  * Call OpenRouter API for recipe extraction
  */
 async function callOpenRouter(
@@ -134,6 +146,12 @@ async function callOpenRouter(
   model: string = DEFAULT_MODELS.free,
   temperature: number = 0.3
 ): Promise<{ content: string; model_used: string }> {
+  if (!OPENROUTER_API_KEY) {
+    throw new Error('OpenRouter API key is not configured');
+  }
+
+  console.log('[OpenRouter] Calling model:', model);
+
   const response = await fetch(OPENROUTER_API_URL, {
     method: 'POST',
     headers: {
@@ -149,25 +167,36 @@ async function callOpenRouter(
         { role: 'user', content: userPrompt },
       ],
       temperature,
-      max_tokens: 2500,
-      response_format: { type: 'json_object' },
+      max_tokens: 3000,
     }),
   });
 
   if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.error?.message || 'OpenRouter API call failed');
+    const errorText = await response.text();
+    console.error('[OpenRouter] API error:', response.status, errorText);
+    try {
+      const error = JSON.parse(errorText);
+      throw new Error(error.error?.message || `API error: ${response.status}`);
+    } catch {
+      throw new Error(`OpenRouter API error: ${response.status} - ${errorText.substring(0, 100)}`);
+    }
   }
 
   const data = await response.json();
-  const content = data.choices[0]?.message?.content;
+  console.log('[OpenRouter] Response received, model:', data.model);
+
+  const content = data.choices?.[0]?.message?.content;
 
   if (!content) {
+    console.error('[OpenRouter] No content in response:', JSON.stringify(data).substring(0, 200));
     throw new Error('No content returned from model');
   }
 
+  // Extract JSON from response (model might include text before/after)
+  const jsonContent = extractJsonFromResponse(content);
+
   return {
-    content,
+    content: jsonContent,
     model_used: data.model || model
   };
 }
@@ -227,8 +256,16 @@ export const extractRecipeFromUrl = async (
       };
     }
 
+    console.log('[Extraction] Starting extraction for:', platform, url);
+
     // Get video transcript
-    const transcript = await getVideoTranscript(url, platform);
+    let transcript: string | null = null;
+    try {
+      transcript = await getVideoTranscript(url, platform);
+      console.log('[Extraction] Transcript result:', transcript ? `${transcript.length} chars` : 'null');
+    } catch (e) {
+      console.warn('[Extraction] Transcript fetch failed:', e);
+    }
 
     // Select model based on tier or explicit choice
     let model = DEFAULT_MODELS.free;
@@ -238,12 +275,29 @@ export const extractRecipeFromUrl = async (
       model = DEFAULT_MODELS.premium;
     }
 
-    const userPrompt = `Please extract the recipe from this ${platform} video content:
+    // Build a more helpful prompt based on what we have
+    let userPrompt: string;
+    if (transcript && transcript.length > 50) {
+      userPrompt = `Please extract the recipe from this ${platform} video.
 
 URL: ${url}
-${transcript ? `\nTranscript/Captions:\n${transcript}` : '\n(No transcript available - extract what you can from the URL and platform context, or indicate if extraction is not possible)'}
 
-Extract all recipe details and return as JSON.`;
+Transcript/Captions:
+${transcript}
+
+Extract all recipe details and return ONLY a valid JSON object matching the schema.`;
+    } else {
+      // No transcript - ask AI to create a reasonable recipe based on URL context
+      // This is useful for Instagram where transcripts are hard to get
+      userPrompt = `I'm trying to save a recipe from this ${platform} video but couldn't get the transcript: ${url}
+
+Please respond with a JSON object that either:
+1. If you can identify the recipe from the URL or have knowledge of this specific video, provide the full recipe details
+2. If you cannot identify the recipe, return this exact JSON:
+{"title": "Unknown Recipe", "description": "Could not extract recipe - please add details manually", "ingredients": [], "instructions": ["Add ingredients and instructions manually"], "tags": [], "prep_time_minutes": null, "cook_time_minutes": null, "total_time_minutes": null, "servings": null, "difficulty": null, "cuisine": null, "notes": "Transcript not available for this video"}
+
+Return ONLY valid JSON, no other text.`;
+    }
 
     const { content, model_used } = await callOpenRouter(
       RECIPE_EXTRACTION_SYSTEM_PROMPT,
@@ -251,7 +305,27 @@ Extract all recipe details and return as JSON.`;
       model
     );
 
-    const recipe = JSON.parse(content);
+    let recipe;
+    try {
+      recipe = JSON.parse(content);
+    } catch (parseError) {
+      console.error('[Extraction] JSON parse error. Content:', content.substring(0, 500));
+      throw new Error('Failed to parse recipe data from AI response');
+    }
+
+    // Validate the recipe has required fields
+    if (!recipe.title) {
+      recipe.title = 'Untitled Recipe';
+    }
+    if (!recipe.ingredients) {
+      recipe.ingredients = [];
+    }
+    if (!recipe.instructions) {
+      recipe.instructions = [];
+    }
+    if (!recipe.tags) {
+      recipe.tags = [];
+    }
 
     return {
       success: true,
@@ -259,7 +333,7 @@ Extract all recipe details and return as JSON.`;
       model_used,
     };
   } catch (error) {
-    console.error('Extraction error:', error);
+    console.error('[Extraction] Error:', error);
     return {
       success: false,
       error: error instanceof Error ? error.message : 'An unexpected error occurred. Please try again.',

@@ -51,6 +51,7 @@ interface RecipeState {
   getFavoriteRecipes: () => RecipeWithIngredients[];
   getRecipesByCookbook: (cookbookId: string) => RecipeWithIngredients[];
   searchRecipes: (query: string) => RecipeWithIngredients[];
+  searchRecipesByIngredients: (ingredients: string[]) => { perfect: RecipeWithIngredients[]; partial: RecipeWithIngredients[] };
 }
 
 const initialFilters = {
@@ -352,6 +353,65 @@ export const useRecipeStore = create<RecipeState>()(
             r.description?.toLowerCase().includes(lowercaseQuery) ||
             r.cuisine?.toLowerCase().includes(lowercaseQuery)
         );
+      },
+
+      searchRecipesByIngredients: (ingredients) => {
+        const { recipes } = get();
+        const normalizedInput = ingredients.map(i => i.toLowerCase().trim());
+
+        const results: { recipe: RecipeWithIngredients; matchCount: number; totalIngredients: number }[] = [];
+
+        for (const recipe of recipes) {
+          // Get ingredients from the recipe - check both the ingredients array and the title/description for hints
+          const recipeIngredients: string[] = [];
+
+          if (recipe.ingredients) {
+            recipeIngredients.push(...recipe.ingredients.map(i => i.name.toLowerCase()));
+          }
+
+          // Also extract potential ingredients from instructions and title
+          const allText = `${recipe.title} ${recipe.description || ''} ${recipe.instructions.join(' ')}`.toLowerCase();
+
+          let matchCount = 0;
+          for (const inputIng of normalizedInput) {
+            // Check if any recipe ingredient contains the input ingredient
+            const hasMatch = recipeIngredients.some(ri =>
+              ri.includes(inputIng) || inputIng.includes(ri)
+            ) || allText.includes(inputIng);
+
+            if (hasMatch) {
+              matchCount++;
+            }
+          }
+
+          if (matchCount > 0) {
+            results.push({
+              recipe,
+              matchCount,
+              totalIngredients: recipeIngredients.length || 5, // Default to 5 if no ingredients stored
+            });
+          }
+        }
+
+        // Sort by match ratio
+        results.sort((a, b) => {
+          const ratioA = a.matchCount / a.totalIngredients;
+          const ratioB = b.matchCount / b.totalIngredients;
+          return ratioB - ratioA;
+        });
+
+        // Perfect matches: match ratio > 0.7 or matchCount >= 3
+        const perfect = results
+          .filter(r => r.matchCount / r.totalIngredients > 0.7 || r.matchCount >= 3)
+          .map(r => r.recipe);
+
+        // Partial matches: some matches but not perfect
+        const partial = results
+          .filter(r => r.matchCount / r.totalIngredients <= 0.7 && r.matchCount < 3 && r.matchCount >= 1)
+          .map(r => r.recipe)
+          .slice(0, 10);
+
+        return { perfect, partial };
       },
     }),
     {
