@@ -16,6 +16,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.cookai.app",
+      "deploymentTarget": "16.0",
       "infoPlist": {
         "NSCameraUsageDescription": "CookAI needs camera access to scan cookbook barcodes and recipe pages",
         "NSPhotoLibraryUsageDescription": "CookAI needs photo library access to import recipe images"
