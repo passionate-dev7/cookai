@@ -24,14 +24,23 @@ try {
 
 const CATEGORIES = [
   { key: 'all', label: 'All', icon: 'restaurant-outline' as const },
-  { key: 'pasta', label: 'Pasta', icon: 'nutrition-outline' as const },
-  { key: 'seafood', label: 'Seafood', icon: 'fish-outline' as const },
   { key: 'meat', label: 'Meat', icon: 'flame-outline' as const },
-  { key: 'dessert', label: 'Dessert', icon: 'ice-cream-outline' as const },
+  { key: 'seafood', label: 'Seafood', icon: 'fish-outline' as const },
+  { key: 'pasta', label: 'Pasta', icon: 'nutrition-outline' as const },
+  { key: 'one-pot', label: 'One-Pot', icon: 'bonfire-outline' as const },
   { key: 'breakfast', label: 'Breakfast', icon: 'cafe-outline' as const },
+  { key: 'dessert', label: 'Dessert', icon: 'ice-cream-outline' as const },
   { key: 'sides', label: 'Sides', icon: 'leaf-outline' as const },
-  { key: 'soup', label: 'Soup', icon: 'water-outline' as const },
+  { key: 'mexican', label: 'Mexican', icon: 'sunny-outline' as const },
+  { key: 'bbq', label: 'BBQ', icon: 'bonfire-outline' as const },
+  { key: 'soups', label: 'Soups', icon: 'water-outline' as const },
 ];
+
+// Map category keys to matching recipe categories
+const CATEGORY_MAP: Record<string, string[]> = {
+  meat: ['beef', 'pork', 'poultry', 'main-course'],
+  bbq: ['barbecue'],
+};
 
 export default function DiscoverScreen() {
   const router = useRouter();
@@ -47,9 +56,10 @@ export default function DiscoverScreen() {
     let recipes = COMMUNITY_RECIPES;
 
     if (selectedCategory !== 'all') {
+      const matchCategories = CATEGORY_MAP[selectedCategory] || [selectedCategory];
       recipes = recipes.filter(r =>
-        r.category?.toLowerCase() === selectedCategory ||
-        r.tags?.some((t: string) => t.toLowerCase() === selectedCategory)
+        matchCategories.includes(r.category?.toLowerCase()) ||
+        r.tags?.some((t: string) => matchCategories.includes(t.toLowerCase()))
       );
     }
 

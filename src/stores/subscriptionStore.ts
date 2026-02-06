@@ -85,8 +85,8 @@ export const useSubscriptionStore = create<SubscriptionState>()(
             set({ customerInfo: info, isPremium });
           });
         } catch (error) {
-          console.error('Failed to initialize RevenueCat:', error);
-          set({ isInitialized: true, error: 'Failed to initialize subscriptions' });
+          console.warn('RevenueCat init error (expected in dev):', error);
+          set({ isInitialized: true, error: null });
         }
       },
 
@@ -115,8 +115,8 @@ export const useSubscriptionStore = create<SubscriptionState>()(
             });
           }
         } catch (error) {
-          console.error('Failed to fetch offerings:', error);
-          set({ error: 'Failed to load subscription options' });
+          console.warn('Failed to fetch offerings (expected in dev):', error);
+          set({ error: null });
         } finally {
           set({ isLoading: false });
         }

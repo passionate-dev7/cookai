@@ -212,7 +212,7 @@ export default function SearchScreen() {
                       <RecipeCard
                         key={recipe.id}
                         recipe={recipe}
-                        variant="full"
+                        variant="default"
                         onPress={() => router.push(`/recipe/${recipe.id}`)}
                       />
                     ))}
@@ -234,7 +234,7 @@ export default function SearchScreen() {
                       <RecipeCard
                         key={recipe.id}
                         recipe={recipe}
-                        variant="full"
+                        variant="default"
                         onPress={() => router.push(`/recipe/${recipe.id}`)}
                       />
                     ))}

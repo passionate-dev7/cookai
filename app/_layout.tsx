@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { LogBox } from 'react-native';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useFonts } from 'expo-font';
@@ -6,6 +7,12 @@ import { StatusBar } from 'expo-status-bar';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useUserStore, useSubscriptionStore, useRecipeStore, useGroceryStore } from '@/src/stores';
 import '../global.css';
+
+LogBox.ignoreLogs([
+  'RevenueCat',
+  'Failed to fetch offerings',
+  'There is an issue with your configuration',
+]);
 
 export { ErrorBoundary } from 'expo-router';
 
