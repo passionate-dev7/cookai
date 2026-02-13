@@ -100,13 +100,13 @@ export default function CookbookDetailScreen() {
               style={{
                 width: 100,
                 height: 140,
-                backgroundColor: '#FFF7ED',
+                backgroundColor: '#E8EDE4',
                 borderRadius: 12,
                 alignItems: 'center',
                 justifyContent: 'center',
               }}
             >
-              <Ionicons name="book-outline" size={40} color="#FDBA74" />
+              <Ionicons name="book-outline" size={40} color="#6B7F5E" />
             </View>
           )}
           <View style={{ flex: 1, justifyContent: 'center' }}>
@@ -120,7 +120,7 @@ export default function CookbookDetailScreen() {
             )}
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-                <Ionicons name="restaurant-outline" size={14} color="#F97316" />
+                <Ionicons name="restaurant-outline" size={14} color="#6B7F5E" />
                 <Text style={{ fontSize: 13, color: '#6B7280' }}>
                   {cookbookRecipes.length} recipes
                 </Text>
@@ -149,7 +149,7 @@ export default function CookbookDetailScreen() {
             onPress={handleScanRecipes}
             variant="outlined"
             padding="md"
-            style={{ backgroundColor: '#FFF7ED', borderColor: '#FDBA74', borderStyle: 'dashed' }}
+            style={{ backgroundColor: '#E8EDE4', borderColor: '#6B7F5E', borderStyle: 'dashed' }}
           >
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
               <View
@@ -157,7 +157,7 @@ export default function CookbookDetailScreen() {
                   width: 48,
                   height: 48,
                   borderRadius: 12,
-                  backgroundColor: '#F97316',
+                  backgroundColor: '#6B7F5E',
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}
@@ -206,7 +206,7 @@ export default function CookbookDetailScreen() {
             Recipes
           </Text>
           <TouchableOpacity>
-            <Text style={{ fontSize: 14, color: '#F97316', fontWeight: '500' }}>Add Recipe</Text>
+            <Text style={{ fontSize: 14, color: '#6B7F5E', fontWeight: '500' }}>Add Recipe</Text>
           </TouchableOpacity>
         </View>
       )}

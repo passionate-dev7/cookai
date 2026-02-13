@@ -86,7 +86,7 @@ export default function BarcodeScannerModal() {
   if (!permission) {
     return (
       <View style={styles.container}>
-        <ActivityIndicator size="large" color="#F97316" />
+        <ActivityIndicator size="large" color="#6B7F5E" />
       </View>
     );
   }
@@ -152,7 +152,7 @@ export default function BarcodeScannerModal() {
 
           {isLoading && (
             <View style={styles.loadingOverlay}>
-              <ActivityIndicator size="large" color="#F97316" />
+              <ActivityIndicator size="large" color="#6B7F5E" />
               <Text style={styles.loadingText}>Looking up book...</Text>
             </View>
           )}
@@ -220,7 +220,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: 30,
     height: 30,
-    borderColor: '#F97316',
+    borderColor: '#6B7F5E',
   },
   topLeft: {
     top: '20%',
@@ -302,7 +302,7 @@ const styles = StyleSheet.create({
     marginBottom: 32,
   },
   permissionButton: {
-    backgroundColor: '#F97316',
+    backgroundColor: '#6B7F5E',
     paddingHorizontal: 32,
     paddingVertical: 14,
     borderRadius: 12,

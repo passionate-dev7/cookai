@@ -119,7 +119,7 @@ export default function SearchScreen() {
               />
               {inputValue.length > 0 && (
                 <TouchableOpacity onPress={handleSubmit}>
-                  <Ionicons name="add-circle" size={24} color="#F97316" />
+                  <Ionicons name="add-circle" size={24} color="#6B7F5E" />
                 </TouchableOpacity>
               )}
             </View>
@@ -137,7 +137,7 @@ export default function SearchScreen() {
                     Your ingredients ({selectedIngredients.length})
                   </Text>
                   <TouchableOpacity onPress={clearAll}>
-                    <Text style={{ fontSize: 14, color: '#F97316' }}>Clear all</Text>
+                    <Text style={{ fontSize: 14, color: '#6B7F5E' }}>Clear all</Text>
                   </TouchableOpacity>
                 </View>
                 <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
@@ -148,7 +148,7 @@ export default function SearchScreen() {
                       style={{
                         flexDirection: 'row',
                         alignItems: 'center',
-                        backgroundColor: '#FFF7ED',
+                        backgroundColor: '#E8EDE4',
                         borderRadius: 8,
                         paddingVertical: 6,
                         paddingLeft: 12,
@@ -156,10 +156,10 @@ export default function SearchScreen() {
                         gap: 4,
                       }}
                     >
-                      <Text style={{ fontSize: 14, color: '#F97316', textTransform: 'capitalize' }}>
+                      <Text style={{ fontSize: 14, color: '#6B7F5E', textTransform: 'capitalize' }}>
                         {ingredient}
                       </Text>
-                      <Ionicons name="close-circle" size={18} color="#F97316" />
+                      <Ionicons name="close-circle" size={18} color="#6B7F5E" />
                     </TouchableOpacity>
                   ))}
                 </View>
@@ -280,12 +280,12 @@ export default function SearchScreen() {
                 width: 80,
                 height: 80,
                 borderRadius: 40,
-                backgroundColor: '#FFF7ED',
+                backgroundColor: '#E8EDE4',
                 alignItems: 'center',
                 justifyContent: 'center',
                 marginBottom: 20,
               }}>
-                <Ionicons name="restaurant-outline" size={36} color="#F97316" />
+                <Ionicons name="restaurant-outline" size={36} color="#6B7F5E" />
               </View>
               <Text style={{ fontSize: 18, fontWeight: '600', color: '#1F2937', textAlign: 'center' }}>
                 Add your ingredients

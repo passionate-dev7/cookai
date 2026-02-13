@@ -47,7 +47,7 @@ export default function HomeScreen() {
         contentContainerStyle={{ paddingBottom: 24 }}
         showsVerticalScrollIndicator={false}
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#F97316" />
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#6B7F5E" />
         }
       >
         {/* Header */}
@@ -69,7 +69,7 @@ export default function HomeScreen() {
               style={{ flex: 1 }}
             >
               <LinearGradient
-                colors={['#F97316', '#EA580C']}
+                colors={['#6B7F5E', '#5C6E50']}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
                 style={{
@@ -106,7 +106,7 @@ export default function HomeScreen() {
               style={{ flex: 1 }}
             >
               <LinearGradient
-                colors={['#14B8A6', '#0D9488']}
+                colors={['#8B6F4E', '#7A6340']}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
                 style={{
@@ -156,12 +156,12 @@ export default function HomeScreen() {
                 width: 44,
                 height: 44,
                 borderRadius: 12,
-                backgroundColor: '#FFF7ED',
+                backgroundColor: '#E8EDE4',
                 alignItems: 'center',
                 justifyContent: 'center',
               }}
             >
-              <Ionicons name="search-outline" size={22} color="#F97316" />
+              <Ionicons name="search-outline" size={22} color="#6B7F5E" />
             </View>
             <View style={{ flex: 1 }}>
               <Text style={{ fontSize: 16, fontWeight: '600', color: '#1F2937' }}>
@@ -169,6 +169,42 @@ export default function HomeScreen() {
               </Text>
               <Text style={{ fontSize: 13, color: '#6B7280' }}>
                 Search by ingredients you have
+              </Text>
+            </View>
+            <Ionicons name="chevron-forward" size={20} color="#9CA3AF" />
+          </Card>
+        </View>
+
+        {/* Anti-Waste Kitchen */}
+        <View style={{ paddingHorizontal: 20, marginBottom: 28 }}>
+          <Card
+            onPress={() => router.push('/(modals)/anti-waste')}
+            variant="outlined"
+            padding="md"
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              gap: 12,
+            }}
+          >
+            <View
+              style={{
+                width: 44,
+                height: 44,
+                borderRadius: 12,
+                backgroundColor: '#ECFDF5',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Ionicons name="leaf-outline" size={22} color="#059669" />
+            </View>
+            <View style={{ flex: 1 }}>
+              <Text style={{ fontSize: 16, fontWeight: '600', color: '#1F2937' }}>
+                Anti-Waste Kitchen
+              </Text>
+              <Text style={{ fontSize: 13, color: '#6B7280' }}>
+                Turn leftovers into delicious meals
               </Text>
             </View>
             <Ionicons name="chevron-forward" size={20} color="#9CA3AF" />
@@ -191,7 +227,7 @@ export default function HomeScreen() {
                 Recent Recipes
               </Text>
               <TouchableOpacity onPress={() => router.push('/(tabs)/recipes')}>
-                <Text style={{ fontSize: 14, color: '#F97316', fontWeight: '500' }}>
+                <Text style={{ fontSize: 14, color: '#6B7F5E', fontWeight: '500' }}>
                   See all
                 </Text>
               </TouchableOpacity>
@@ -233,7 +269,7 @@ export default function HomeScreen() {
                   router.push('/(tabs)/recipes');
                 }}
               >
-                <Text style={{ fontSize: 14, color: '#F97316', fontWeight: '500' }}>
+                <Text style={{ fontSize: 14, color: '#6B7F5E', fontWeight: '500' }}>
                   See all
                 </Text>
               </TouchableOpacity>
@@ -304,13 +340,13 @@ export default function HomeScreen() {
                 width: 80,
                 height: 80,
                 borderRadius: 40,
-                backgroundColor: '#FFF7ED',
+                backgroundColor: '#E8EDE4',
                 alignItems: 'center',
                 justifyContent: 'center',
                 marginBottom: 20,
               }}
             >
-              <Ionicons name="restaurant-outline" size={36} color="#F97316" />
+              <Ionicons name="restaurant-outline" size={36} color="#6B7F5E" />
             </View>
             <Text
               style={{
@@ -373,7 +409,7 @@ export default function HomeScreen() {
                   style={{
                     paddingHorizontal: 16,
                     paddingVertical: 8,
-                    backgroundColor: '#F97316',
+                    backgroundColor: '#6B7F5E',
                     borderRadius: 8,
                   }}
                 >

@@ -5,3 +5,5 @@ export { RecipeCard } from './RecipeCard';
 export { EmptyState } from './EmptyState';
 export { SearchBar } from './SearchBar';
 export { LoadingSpinner } from './LoadingSpinner';
+export { CookingMemories } from './CookingMemories';
+export { CommentSection } from './CommentSection';

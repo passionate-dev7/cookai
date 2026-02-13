@@ -168,10 +168,10 @@ export default function DiscoverScreen() {
               <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6 }}>
                 {recipe.category ? (
                   <View style={{
-                    backgroundColor: '#FFF7ED', borderRadius: 6,
+                    backgroundColor: '#E8EDE4', borderRadius: 6,
                     paddingHorizontal: 8, paddingVertical: 3,
                   }}>
-                    <Text style={{ fontSize: 12, color: '#F97316', fontWeight: '500' }}>
+                    <Text style={{ fontSize: 12, color: '#6B7F5E', fontWeight: '500' }}>
                       {recipe.category}
                     </Text>
                   </View>
@@ -230,7 +230,7 @@ export default function DiscoverScreen() {
                 </Text>
                 {recipe.instructions.map((step: string, idx: number) => (
                   <View key={idx} style={{ flexDirection: 'row', marginBottom: 8 }}>
-                    <Text style={{ fontSize: 14, fontWeight: '600', color: '#F97316', width: 24 }}>
+                    <Text style={{ fontSize: 14, fontWeight: '600', color: '#6B7F5E', width: 24 }}>
                       {idx + 1}.
                     </Text>
                     <Text style={{ fontSize: 14, color: '#374151', flex: 1, lineHeight: 22 }}>
@@ -302,7 +302,7 @@ export default function DiscoverScreen() {
               paddingHorizontal: 14,
               paddingVertical: 8,
               borderRadius: 20,
-              backgroundColor: selectedCategory === cat.key ? '#F97316' : '#F3F4F6',
+              backgroundColor: selectedCategory === cat.key ? '#6B7F5E' : '#F3F4F6',
               gap: 6,
             }}
           >

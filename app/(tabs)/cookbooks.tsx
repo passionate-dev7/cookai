@@ -59,14 +59,14 @@ export default function CookbooksScreen() {
               style={{
                 width: 100,
                 height: 140,
-                backgroundColor: '#FFF7ED',
+                backgroundColor: '#E8EDE4',
                 borderTopLeftRadius: 16,
                 borderBottomLeftRadius: 16,
                 alignItems: 'center',
                 justifyContent: 'center',
               }}
             >
-              <Ionicons name="book-outline" size={36} color="#FDBA74" />
+              <Ionicons name="book-outline" size={36} color="#6B7F5E" />
             </View>
           )}
           <View style={{ flex: 1, padding: 14, justifyContent: 'center' }}>
@@ -83,7 +83,7 @@ export default function CookbooksScreen() {
             )}
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-                <Ionicons name="restaurant-outline" size={14} color="#F97316" />
+                <Ionicons name="restaurant-outline" size={14} color="#6B7F5E" />
                 <Text style={{ fontSize: 13, color: '#6B7280' }}>
                   {getRecipeCount(item.id)} recipes
                 </Text>
@@ -135,7 +135,7 @@ export default function CookbooksScreen() {
         contentContainerStyle={{ paddingTop: 8, paddingBottom: 100 }}
         showsVerticalScrollIndicator={false}
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#F97316" />
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#6B7F5E" />
         }
         ListEmptyComponent={
           <EmptyState
@@ -164,10 +164,10 @@ export default function CookbooksScreen() {
           width: 56,
           height: 56,
           borderRadius: 28,
-          backgroundColor: '#F97316',
+          backgroundColor: '#6B7F5E',
           alignItems: 'center',
           justifyContent: 'center',
-          shadowColor: '#F97316',
+          shadowColor: '#6B7F5E',
           shadowOffset: { width: 0, height: 4 },
           shadowOpacity: 0.3,
           shadowRadius: 8,

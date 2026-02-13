@@ -99,22 +99,22 @@ export default function RecipesScreen() {
                 paddingHorizontal: 14,
                 paddingVertical: 8,
                 borderRadius: 20,
-                backgroundColor: activeFilter === item.key ? '#FFF7ED' : '#F3F4F6',
+                backgroundColor: activeFilter === item.key ? '#E8EDE4' : '#F3F4F6',
                 borderWidth: activeFilter === item.key ? 1.5 : 0,
-                borderColor: '#F97316',
+                borderColor: '#6B7F5E',
                 gap: 6,
               }}
             >
               <Ionicons
                 name={item.icon}
                 size={16}
-                color={activeFilter === item.key ? '#F97316' : '#6B7280'}
+                color={activeFilter === item.key ? '#6B7F5E' : '#6B7280'}
               />
               <Text
                 style={{
                   fontSize: 14,
                   fontWeight: '500',
-                  color: activeFilter === item.key ? '#F97316' : '#6B7280',
+                  color: activeFilter === item.key ? '#6B7F5E' : '#6B7280',
                 }}
               >
                 {item.label}
@@ -132,7 +132,7 @@ export default function RecipesScreen() {
         contentContainerStyle={{ paddingTop: 8, paddingBottom: 100 }}
         showsVerticalScrollIndicator={false}
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#F97316" />
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#6B7F5E" />
         }
         ListEmptyComponent={
           <EmptyState
@@ -161,10 +161,10 @@ export default function RecipesScreen() {
           width: 56,
           height: 56,
           borderRadius: 28,
-          backgroundColor: '#F97316',
+          backgroundColor: '#6B7F5E',
           alignItems: 'center',
           justifyContent: 'center',
-          shadowColor: '#F97316',
+          shadowColor: '#6B7F5E',
           shadowOffset: { width: 0, height: 4 },
           shadowOpacity: 0.3,
           shadowRadius: 8,

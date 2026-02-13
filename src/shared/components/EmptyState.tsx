@@ -37,13 +37,13 @@ export function EmptyState({
           width: 80,
           height: 80,
           borderRadius: 40,
-          backgroundColor: '#FFF7ED',
+          backgroundColor: '#E8EDE4',
           alignItems: 'center',
           justifyContent: 'center',
           marginBottom: 20,
         }}
       >
-        <Ionicons name={icon} size={36} color="#F97316" />
+        <Ionicons name={icon} size={36} color="#6B7F5E" />
       </View>
 
       <Text

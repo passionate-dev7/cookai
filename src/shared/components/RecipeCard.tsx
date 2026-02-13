@@ -66,12 +66,12 @@ export function RecipeCard({
               style={{
                 width: '100%',
                 height: 120,
-                backgroundColor: '#FFF7ED',
+                backgroundColor: '#E8EDE4',
                 alignItems: 'center',
                 justifyContent: 'center',
               }}
             >
-              <Ionicons name="restaurant-outline" size={32} color="#FDBA74" />
+              <Ionicons name="restaurant-outline" size={32} color="#6B7F5E" />
             </View>
           )}
         </View>
@@ -125,12 +125,12 @@ export function RecipeCard({
             style={{
               width: 100,
               height: 100,
-              backgroundColor: '#FFF7ED',
+              backgroundColor: '#E8EDE4',
               alignItems: 'center',
               justifyContent: 'center',
             }}
           >
-            <Ionicons name="restaurant-outline" size={28} color="#FDBA74" />
+            <Ionicons name="restaurant-outline" size={28} color="#6B7F5E" />
           </View>
         )}
         <View style={{ flex: 1, padding: 12, justifyContent: 'center' }}>
@@ -209,12 +209,12 @@ export function RecipeCard({
             style={{
               width: '100%',
               height: 180,
-              backgroundColor: '#FFF7ED',
+              backgroundColor: '#E8EDE4',
               alignItems: 'center',
               justifyContent: 'center',
             }}
           >
-            <Ionicons name="restaurant-outline" size={48} color="#FDBA74" />
+            <Ionicons name="restaurant-outline" size={48} color="#6B7F5E" />
           </View>
         )}
 
@@ -292,7 +292,7 @@ export function RecipeCard({
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>
           {recipe.total_time_minutes && (
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-              <Ionicons name="time-outline" size={16} color="#F97316" />
+              <Ionicons name="time-outline" size={16} color="#6B7F5E" />
               <Text style={{ fontSize: 14, color: '#374151' }}>
                 {formatTime(recipe.total_time_minutes)}
               </Text>
@@ -301,7 +301,7 @@ export function RecipeCard({
 
           {recipe.servings && (
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-              <Ionicons name="people-outline" size={16} color="#F97316" />
+              <Ionicons name="people-outline" size={16} color="#6B7F5E" />
               <Text style={{ fontSize: 14, color: '#374151' }}>
                 {recipe.servings} servings
               </Text>

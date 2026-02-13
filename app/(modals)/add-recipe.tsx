@@ -212,9 +212,9 @@ export default function AddRecipeModal() {
                 flex: 1,
                 paddingVertical: 10,
                 borderRadius: 10,
-                backgroundColor: difficulty === level ? '#FFF7ED' : '#F3F4F6',
+                backgroundColor: difficulty === level ? '#E8EDE4' : '#F3F4F6',
                 borderWidth: difficulty === level ? 1.5 : 0,
-                borderColor: '#F97316',
+                borderColor: '#6B7F5E',
                 alignItems: 'center',
               }}
             >
@@ -222,7 +222,7 @@ export default function AddRecipeModal() {
                 style={{
                   fontSize: 14,
                   fontWeight: '500',
-                  color: difficulty === level ? '#F97316' : '#6B7280',
+                  color: difficulty === level ? '#6B7F5E' : '#6B7280',
                   textTransform: 'capitalize',
                 }}
               >
@@ -278,8 +278,8 @@ export default function AddRecipeModal() {
             onPress={addIngredient}
             style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 8, gap: 6 }}
           >
-            <Ionicons name="add-circle-outline" size={20} color="#F97316" />
-            <Text style={{ fontSize: 14, color: '#F97316', fontWeight: '500' }}>Add Ingredient</Text>
+            <Ionicons name="add-circle-outline" size={20} color="#6B7F5E" />
+            <Text style={{ fontSize: 14, color: '#6B7F5E', fontWeight: '500' }}>Add Ingredient</Text>
           </TouchableOpacity>
         </View>
 
@@ -295,13 +295,13 @@ export default function AddRecipeModal() {
                   width: 28,
                   height: 28,
                   borderRadius: 14,
-                  backgroundColor: '#FFF7ED',
+                  backgroundColor: '#E8EDE4',
                   alignItems: 'center',
                   justifyContent: 'center',
                   marginTop: 10,
                 }}
               >
-                <Text style={{ fontSize: 12, fontWeight: '600', color: '#F97316' }}>{index + 1}</Text>
+                <Text style={{ fontSize: 12, fontWeight: '600', color: '#6B7F5E' }}>{index + 1}</Text>
               </View>
               <View style={{ flex: 1 }}>
                 <Input
@@ -328,8 +328,8 @@ export default function AddRecipeModal() {
             onPress={addInstruction}
             style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 8, gap: 6 }}
           >
-            <Ionicons name="add-circle-outline" size={20} color="#F97316" />
-            <Text style={{ fontSize: 14, color: '#F97316', fontWeight: '500' }}>Add Step</Text>
+            <Ionicons name="add-circle-outline" size={20} color="#6B7F5E" />
+            <Text style={{ fontSize: 14, color: '#6B7F5E', fontWeight: '500' }}>Add Step</Text>
           </TouchableOpacity>
         </View>
 

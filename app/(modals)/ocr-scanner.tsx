@@ -149,7 +149,7 @@ export default function OCRScannerModal() {
   if (!permission) {
     return (
       <View style={styles.container}>
-        <ActivityIndicator size="large" color="#F97316" />
+        <ActivityIndicator size="large" color="#6B7F5E" />
       </View>
     );
   }
@@ -257,7 +257,7 @@ export default function OCRScannerModal() {
   if (scanState === 'extracting') {
     return (
       <View style={[styles.container, styles.centerContent]}>
-        <ActivityIndicator size="large" color="#F97316" />
+        <ActivityIndicator size="large" color="#6B7F5E" />
         <Text style={styles.extractingTitle}>Extracting Recipe</Text>
         <Text style={styles.extractingText}>
           Analyzing the page with AI...
@@ -284,13 +284,13 @@ export default function OCRScannerModal() {
         <View style={styles.metaRow}>
           {extractedRecipe.total_time_minutes && (
             <View style={styles.metaItem}>
-              <Ionicons name="time-outline" size={16} color="#F97316" />
+              <Ionicons name="time-outline" size={16} color="#6B7F5E" />
               <Text style={styles.metaText}>{extractedRecipe.total_time_minutes} min</Text>
             </View>
           )}
           {extractedRecipe.servings && (
             <View style={styles.metaItem}>
-              <Ionicons name="people-outline" size={16} color="#F97316" />
+              <Ionicons name="people-outline" size={16} color="#6B7F5E" />
               <Text style={styles.metaText}>{extractedRecipe.servings} servings</Text>
             </View>
           )}
@@ -389,7 +389,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: 40,
     height: 40,
-    borderColor: '#F97316',
+    borderColor: '#6B7F5E',
   },
   topLeft: {
     top: 0,
@@ -467,7 +467,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    backgroundColor: '#F97316',
+    backgroundColor: '#6B7F5E',
     paddingHorizontal: 24,
     paddingVertical: 14,
     borderRadius: 12,
@@ -550,7 +550,7 @@ const styles = StyleSheet.create({
     width: 6,
     height: 6,
     borderRadius: 3,
-    backgroundColor: '#F97316',
+    backgroundColor: '#6B7F5E',
     marginRight: 12,
   },
   ingredientText: {
@@ -565,7 +565,7 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     borderRadius: 12,
-    backgroundColor: '#FFF7ED',
+    backgroundColor: '#E8EDE4',
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 12,
@@ -573,7 +573,7 @@ const styles = StyleSheet.create({
   stepNumberText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#F97316',
+    color: '#6B7F5E',
   },
   stepText: {
     flex: 1,
@@ -603,7 +603,7 @@ const styles = StyleSheet.create({
     marginBottom: 32,
   },
   permissionButton: {
-    backgroundColor: '#F97316',
+    backgroundColor: '#6B7F5E',
     paddingHorizontal: 32,
     paddingVertical: 14,
     borderRadius: 12,

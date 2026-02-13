@@ -120,7 +120,7 @@ export default function PaywallModal() {
       >
         {/* Header */}
         <LinearGradient
-          colors={['#FFF7ED', '#FFFFFF']}
+          colors={['#E8EDE4', '#FFFFFF']}
           style={{ paddingTop: 20, paddingBottom: 30, paddingHorizontal: 20 }}
         >
           <View style={{ alignItems: 'center' }}>
@@ -129,7 +129,7 @@ export default function PaywallModal() {
                 width: 72,
                 height: 72,
                 borderRadius: 20,
-                backgroundColor: '#F97316',
+                backgroundColor: '#6B7F5E',
                 alignItems: 'center',
                 justifyContent: 'center',
                 marginBottom: 16,
@@ -173,13 +173,13 @@ export default function PaywallModal() {
                   width: 40,
                   height: 40,
                   borderRadius: 10,
-                  backgroundColor: '#FFF7ED',
+                  backgroundColor: '#E8EDE4',
                   alignItems: 'center',
                   justifyContent: 'center',
                   marginRight: 12,
                 }}
               >
-                <Ionicons name={feature.icon} size={20} color="#F97316" />
+                <Ionicons name={feature.icon} size={20} color="#6B7F5E" />
               </View>
               <View style={{ flex: 1 }}>
                 <Text style={{ fontSize: 15, fontWeight: '600', color: '#1F2937' }}>
@@ -187,7 +187,7 @@ export default function PaywallModal() {
                 </Text>
                 <Text style={{ fontSize: 13, color: '#6B7280' }}>{feature.description}</Text>
               </View>
-              <Ionicons name="checkmark-circle" size={22} color="#14B8A6" />
+              <Ionicons name="checkmark-circle" size={22} color="#8B6F4E" />
             </View>
           ))}
         </View>
@@ -209,7 +209,7 @@ export default function PaywallModal() {
                 variant={selectedPackage === annualPackage.identifier ? 'elevated' : 'outlined'}
                 padding="md"
                 style={{
-                  borderColor: selectedPackage === annualPackage.identifier ? '#F97316' : '#E5E7EB',
+                  borderColor: selectedPackage === annualPackage.identifier ? '#6B7F5E' : '#E5E7EB',
                   borderWidth: selectedPackage === annualPackage.identifier ? 2 : 1,
                 }}
               >
@@ -220,8 +220,8 @@ export default function PaywallModal() {
                       height: 22,
                       borderRadius: 11,
                       borderWidth: 2,
-                      borderColor: selectedPackage === annualPackage.identifier ? '#F97316' : '#D1D5DB',
-                      backgroundColor: selectedPackage === annualPackage.identifier ? '#F97316' : 'transparent',
+                      borderColor: selectedPackage === annualPackage.identifier ? '#6B7F5E' : '#D1D5DB',
+                      backgroundColor: selectedPackage === annualPackage.identifier ? '#6B7F5E' : 'transparent',
                       alignItems: 'center',
                       justifyContent: 'center',
                       marginRight: 12,
@@ -271,7 +271,7 @@ export default function PaywallModal() {
                 variant={selectedPackage === monthlyPackage.identifier ? 'elevated' : 'outlined'}
                 padding="md"
                 style={{
-                  borderColor: selectedPackage === monthlyPackage.identifier ? '#F97316' : '#E5E7EB',
+                  borderColor: selectedPackage === monthlyPackage.identifier ? '#6B7F5E' : '#E5E7EB',
                   borderWidth: selectedPackage === monthlyPackage.identifier ? 2 : 1,
                 }}
               >
@@ -282,8 +282,8 @@ export default function PaywallModal() {
                       height: 22,
                       borderRadius: 11,
                       borderWidth: 2,
-                      borderColor: selectedPackage === monthlyPackage.identifier ? '#F97316' : '#D1D5DB',
-                      backgroundColor: selectedPackage === monthlyPackage.identifier ? '#F97316' : 'transparent',
+                      borderColor: selectedPackage === monthlyPackage.identifier ? '#6B7F5E' : '#D1D5DB',
+                      backgroundColor: selectedPackage === monthlyPackage.identifier ? '#6B7F5E' : 'transparent',
                       alignItems: 'center',
                       justifyContent: 'center',
                       marginRight: 12,
@@ -316,7 +316,7 @@ export default function PaywallModal() {
                 variant={selectedPackage === lifetimePackage.identifier ? 'elevated' : 'outlined'}
                 padding="md"
                 style={{
-                  borderColor: selectedPackage === lifetimePackage.identifier ? '#F97316' : '#E5E7EB',
+                  borderColor: selectedPackage === lifetimePackage.identifier ? '#6B7F5E' : '#E5E7EB',
                   borderWidth: selectedPackage === lifetimePackage.identifier ? 2 : 1,
                 }}
               >
@@ -327,8 +327,8 @@ export default function PaywallModal() {
                       height: 22,
                       borderRadius: 11,
                       borderWidth: 2,
-                      borderColor: selectedPackage === lifetimePackage.identifier ? '#F97316' : '#D1D5DB',
-                      backgroundColor: selectedPackage === lifetimePackage.identifier ? '#F97316' : 'transparent',
+                      borderColor: selectedPackage === lifetimePackage.identifier ? '#6B7F5E' : '#D1D5DB',
+                      backgroundColor: selectedPackage === lifetimePackage.identifier ? '#6B7F5E' : 'transparent',
                       alignItems: 'center',
                       justifyContent: 'center',
                       marginRight: 12,

@@ -123,12 +123,12 @@ export default function AddCookbookModal() {
                 width: 48,
                 height: 48,
                 borderRadius: 12,
-                backgroundColor: '#FFF7ED',
+                backgroundColor: '#E8EDE4',
                 alignItems: 'center',
                 justifyContent: 'center',
               }}
             >
-              <Ionicons name="barcode-outline" size={24} color="#F97316" />
+              <Ionicons name="barcode-outline" size={24} color="#6B7F5E" />
             </View>
             <View style={{ flex: 1 }}>
               <Text style={{ fontSize: 16, fontWeight: '600', color: '#1F2937' }}>
@@ -208,16 +208,16 @@ export default function AddCookbookModal() {
           <Card
             variant="outlined"
             padding="md"
-            style={{ marginBottom: 16, backgroundColor: '#FFF7ED', borderColor: '#FDBA74' }}
+            style={{ marginBottom: 16, backgroundColor: '#E8EDE4', borderColor: '#6B7F5E' }}
           >
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
-              <Ionicons name="information-circle" size={24} color="#F97316" />
+              <Ionicons name="information-circle" size={24} color="#6B7F5E" />
               <View style={{ flex: 1 }}>
                 <Text style={{ fontSize: 14, fontWeight: '500', color: '#9A3412' }}>
                   Cookbook limit reached
                 </Text>
                 <TouchableOpacity onPress={() => router.push('/(modals)/paywall')}>
-                  <Text style={{ fontSize: 13, color: '#F97316', marginTop: 2 }}>
+                  <Text style={{ fontSize: 13, color: '#6B7F5E', marginTop: 2 }}>
                     Upgrade for unlimited cookbooks
                   </Text>
                 </TouchableOpacity>

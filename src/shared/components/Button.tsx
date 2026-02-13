@@ -52,15 +52,15 @@ export function Button({
 
   const variantStyles: Record<string, ViewStyle> = {
     primary: {
-      backgroundColor: isDisabled ? '#FED7AA' : '#F97316',
+      backgroundColor: isDisabled ? '#A8B89E' : '#6B7F5E',
     },
     secondary: {
-      backgroundColor: isDisabled ? '#99F6E4' : '#14B8A6',
+      backgroundColor: isDisabled ? '#B8A890' : '#8B6F4E',
     },
     outline: {
       backgroundColor: 'transparent',
       borderWidth: 2,
-      borderColor: isDisabled ? '#FED7AA' : '#F97316',
+      borderColor: isDisabled ? '#A8B89E' : '#6B7F5E',
     },
     ghost: {
       backgroundColor: 'transparent',
@@ -76,8 +76,8 @@ export function Button({
   const textVariantStyles: Record<string, TextStyle> = {
     primary: { color: '#FFFFFF' },
     secondary: { color: '#FFFFFF' },
-    outline: { color: isDisabled ? '#FED7AA' : '#F97316' },
-    ghost: { color: isDisabled ? '#9CA3AF' : '#F97316' },
+    outline: { color: isDisabled ? '#A8B89E' : '#6B7F5E' },
+    ghost: { color: isDisabled ? '#9CA3AF' : '#6B7F5E' },
   };
 
   return (
@@ -94,7 +94,7 @@ export function Button({
     >
       {loading ? (
         <ActivityIndicator
-          color={variant === 'primary' || variant === 'secondary' ? '#FFFFFF' : '#F97316'}
+          color={variant === 'primary' || variant === 'secondary' ? '#FFFFFF' : '#6B7F5E'}
           size="small"
         />
       ) : (

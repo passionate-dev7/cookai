@@ -172,13 +172,13 @@ export default function ExtractRecipeModal() {
           </Text>
           <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 16 }}>
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-              <Ionicons name="time-outline" size={16} color="#F97316" />
+              <Ionicons name="time-outline" size={16} color="#6B7F5E" />
               <Text style={{ fontSize: 14, color: '#6B7280' }}>
                 {extractedRecipe.total_time_minutes} min
               </Text>
             </View>
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-              <Ionicons name="people-outline" size={16} color="#F97316" />
+              <Ionicons name="people-outline" size={16} color="#6B7F5E" />
               <Text style={{ fontSize: 14, color: '#6B7280' }}>
                 {extractedRecipe.servings} servings
               </Text>
@@ -192,7 +192,7 @@ export default function ExtractRecipeModal() {
           </Text>
           {extractedRecipe.ingredients.map((ing: any, index: number) => (
             <View key={index} style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 8 }}>
-              <View style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: '#F97316', marginRight: 12 }} />
+              <View style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: '#6B7F5E', marginRight: 12 }} />
               <Text style={{ fontSize: 15, color: '#1F2937' }}>
                 {ing.quantity} {ing.unit} {ing.name}
               </Text>
@@ -211,13 +211,13 @@ export default function ExtractRecipeModal() {
                   width: 24,
                   height: 24,
                   borderRadius: 12,
-                  backgroundColor: '#FFF7ED',
+                  backgroundColor: '#E8EDE4',
                   alignItems: 'center',
                   justifyContent: 'center',
                   marginRight: 12,
                 }}
               >
-                <Text style={{ fontSize: 12, fontWeight: '600', color: '#F97316' }}>{index + 1}</Text>
+                <Text style={{ fontSize: 12, fontWeight: '600', color: '#6B7F5E' }}>{index + 1}</Text>
               </View>
               <Text style={{ flex: 1, fontSize: 15, color: '#1F2937', lineHeight: 22 }}>{step}</Text>
             </View>
@@ -252,16 +252,16 @@ export default function ExtractRecipeModal() {
           <Card
             variant="outlined"
             padding="md"
-            style={{ marginBottom: 20, backgroundColor: '#FFF7ED', borderColor: '#FDBA74' }}
+            style={{ marginBottom: 20, backgroundColor: '#E8EDE4', borderColor: '#6B7F5E' }}
           >
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
-              <Ionicons name="information-circle" size={24} color="#F97316" />
+              <Ionicons name="information-circle" size={24} color="#6B7F5E" />
               <View style={{ flex: 1 }}>
                 <Text style={{ fontSize: 14, fontWeight: '500', color: '#9A3412' }}>
                   {remainingExtractions} extraction{remainingExtractions !== 1 ? 's' : ''} remaining this month
                 </Text>
                 <TouchableOpacity onPress={() => router.push('/(modals)/paywall')}>
-                  <Text style={{ fontSize: 13, color: '#F97316', marginTop: 2 }}>
+                  <Text style={{ fontSize: 13, color: '#6B7F5E', marginTop: 2 }}>
                     Upgrade for unlimited
                   </Text>
                 </TouchableOpacity>
@@ -297,9 +297,9 @@ export default function ExtractRecipeModal() {
                 paddingHorizontal: 14,
                 paddingVertical: 10,
                 borderRadius: 10,
-                backgroundColor: selectedPlatform === platform.key ? '#FFF7ED' : '#F3F4F6',
+                backgroundColor: selectedPlatform === platform.key ? '#E8EDE4' : '#F3F4F6',
                 borderWidth: selectedPlatform === platform.key ? 1.5 : 0,
-                borderColor: '#F97316',
+                borderColor: '#6B7F5E',
                 gap: 8,
               }}
             >
@@ -337,13 +337,13 @@ export default function ExtractRecipeModal() {
                   width: 22,
                   height: 22,
                   borderRadius: 11,
-                  backgroundColor: '#FFF7ED',
+                  backgroundColor: '#E8EDE4',
                   alignItems: 'center',
                   justifyContent: 'center',
                   marginRight: 10,
                 }}
               >
-                <Text style={{ fontSize: 11, fontWeight: '600', color: '#F97316' }}>{index + 1}</Text>
+                <Text style={{ fontSize: 11, fontWeight: '600', color: '#6B7F5E' }}>{index + 1}</Text>
               </View>
               <Text style={{ fontSize: 14, color: '#6B7280' }}>{step}</Text>
             </View>

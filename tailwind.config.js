@@ -9,48 +9,49 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // CookAI Brand Colors
+        // CookAI Brand Colors – Sage & Terracotta
         primary: {
-          50: '#FFF7ED',
-          100: '#FFEDD5',
-          200: '#FED7AA',
-          300: '#FDBA74',
-          400: '#FB923C',
-          500: '#F97316', // Main orange
-          600: '#EA580C',
-          700: '#C2410C',
-          800: '#9A3412',
-          900: '#7C2D12',
-          950: '#431407',
+          50: '#E8EDE4',
+          100: '#D5DFD0',
+          200: '#B8CCAE',
+          300: '#9AB88E',
+          400: '#7D9E6E',
+          500: '#6B7F5E', // Sage green
+          600: '#5C6E50',
+          700: '#4D5D43',
+          800: '#3D4A36',
+          900: '#2E3829',
+          950: '#1F261C',
         },
         secondary: {
-          50: '#F0FDFA',
-          100: '#CCFBF1',
-          200: '#99F6E4',
-          300: '#5EEAD4',
-          400: '#2DD4BF', // Electric teal
-          500: '#14B8A6',
-          600: '#0D9488',
-          700: '#0F766E',
-          800: '#115E59',
-          900: '#134E4A',
-          950: '#042F2E',
+          50: '#F5EDE6',
+          100: '#EBDACC',
+          200: '#D6B599',
+          300: '#C29066',
+          400: '#A07A55',
+          500: '#8B6F4E', // Warm brown
+          600: '#7A6340',
+          700: '#605034',
+          800: '#4A3D28',
+          900: '#352C1D',
+          950: '#1F1A11',
         },
-        coral: {
-          50: '#FFF5F5',
-          100: '#FFE5E5',
-          200: '#FFCCCC',
-          300: '#FFA8A8',
-          400: '#FF7B7B',
-          500: '#FF6B6B', // Coral accent
-          600: '#FA5252',
-          700: '#F03E3E',
-          800: '#E03131',
-          900: '#C92A2A',
+        accent: {
+          50: '#F5E1D6',
+          100: '#EFCFBD',
+          200: '#E3AE93',
+          300: '#D4885F',
+          400: '#C4704B', // Terracotta
+          500: '#B0613F',
+          600: '#9A5336',
+          700: '#7D432C',
+          800: '#603322',
+          900: '#432318',
+          950: '#26140E',
         },
-        cream: '#FFFBF5',
-        warmWhite: '#FDF8F3',
-        charcoal: '#2D3436',
+        cream: '#FAF8F5',
+        warmWhite: '#F3F0EB',
+        charcoal: '#2C2825',
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],

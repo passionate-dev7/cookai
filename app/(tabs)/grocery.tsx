@@ -143,8 +143,8 @@ export default function GroceryScreen() {
           height: 24,
           borderRadius: 12,
           borderWidth: 2,
-          borderColor: item.is_checked ? '#14B8A6' : '#D1D5DB',
-          backgroundColor: item.is_checked ? '#14B8A6' : 'transparent',
+          borderColor: item.is_checked ? '#8B6F4E' : '#D1D5DB',
+          backgroundColor: item.is_checked ? '#8B6F4E' : 'transparent',
           alignItems: 'center',
           justifyContent: 'center',
           marginRight: 12,
@@ -183,9 +183,9 @@ export default function GroceryScreen() {
       <View style={{ flex: 1, backgroundColor: '#F9FAFB', justifyContent: 'center', alignItems: 'center', padding: 40 }}>
         <View style={{
           width: 80, height: 80, borderRadius: 40,
-          backgroundColor: '#FFF7ED', alignItems: 'center', justifyContent: 'center', marginBottom: 20,
+          backgroundColor: '#E8EDE4', alignItems: 'center', justifyContent: 'center', marginBottom: 20,
         }}>
-          <Ionicons name="cart-outline" size={36} color="#F97316" />
+          <Ionicons name="cart-outline" size={36} color="#6B7F5E" />
         </View>
         <Text style={{ fontSize: 20, fontWeight: '600', color: '#1F2937', textAlign: 'center', marginBottom: 8 }}>
           Sign in to use Grocery Lists
@@ -248,12 +248,12 @@ export default function GroceryScreen() {
               width: 36,
               height: 36,
               borderRadius: 18,
-              backgroundColor: '#FFF7ED',
+              backgroundColor: '#E8EDE4',
               alignItems: 'center',
               justifyContent: 'center',
             }}
           >
-            <Ionicons name="add" size={20} color="#F97316" />
+            <Ionicons name="add" size={20} color="#6B7F5E" />
           </View>
           <Text style={{ fontSize: 16, color: '#6B7280' }}>Add an item</Text>
         </TouchableOpacity>
@@ -268,7 +268,7 @@ export default function GroceryScreen() {
             </Text>
             {checkedCount > 0 && (
               <TouchableOpacity onPress={handleClearChecked}>
-                <Text style={{ fontSize: 14, color: '#F97316', fontWeight: '500' }}>
+                <Text style={{ fontSize: 14, color: '#6B7F5E', fontWeight: '500' }}>
                   Clear checked
                 </Text>
               </TouchableOpacity>
@@ -279,7 +279,7 @@ export default function GroceryScreen() {
               style={{
                 height: '100%',
                 width: `${(checkedCount / totalCount) * 100}%`,
-                backgroundColor: '#14B8A6',
+                backgroundColor: '#8B6F4E',
                 borderRadius: 3,
               }}
             />
@@ -294,7 +294,7 @@ export default function GroceryScreen() {
           keyExtractor={(aisle) => aisle}
           contentContainerStyle={{ paddingBottom: 100 }}
           refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#F97316" />
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#6B7F5E" />
           }
           renderItem={({ item: aisle }) => (
             <View style={{ marginTop: 16 }}>
@@ -307,7 +307,7 @@ export default function GroceryScreen() {
                   gap: 8,
                 }}
               >
-                <Ionicons name="location-outline" size={16} color="#F97316" />
+                <Ionicons name="location-outline" size={16} color="#6B7F5E" />
                 <Text style={{ fontSize: 14, fontWeight: '600', color: '#374151' }}>{aisle}</Text>
                 <Text style={{ fontSize: 13, color: '#9CA3AF' }}>
                   ({itemsByAisle[aisle].length})

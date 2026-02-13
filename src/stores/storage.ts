@@ -1,34 +1,41 @@
-import { createMMKV } from 'react-native-mmkv';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StateStorage } from 'zustand/middleware';
 
-export const storage = createMMKV({
-  id: 'cookai-storage',
-});
-
-// Zustand persistence storage adapter
+// Zustand persistence storage adapter (AsyncStorage - works in Expo Go)
 export const zustandStorage: StateStorage = {
-  getItem: (name: string): string | null => {
-    const value = storage.getString(name);
-    return value ?? null;
+  getItem: async (name: string): Promise<string | null> => {
+    return await AsyncStorage.getItem(name);
   },
-  setItem: (name: string, value: string): void => {
-    storage.set(name, value);
+  setItem: async (name: string, value: string): Promise<void> => {
+    await AsyncStorage.setItem(name, value);
   },
-  removeItem: (name: string): void => {
-    storage.delete(name);
+  removeItem: async (name: string): Promise<void> => {
+    await AsyncStorage.removeItem(name);
   },
 };
 
 // Helper functions for typed storage
 export const storageHelpers = {
-  getString: (key: string): string | undefined => storage.getString(key),
-  setString: (key: string, value: string): void => storage.set(key, value),
-  getNumber: (key: string): number | undefined => storage.getNumber(key),
-  setNumber: (key: string, value: number): void => storage.set(key, value),
-  getBoolean: (key: string): boolean | undefined => storage.getBoolean(key),
-  setBoolean: (key: string, value: boolean): void => storage.set(key, value),
-  getObject: <T>(key: string): T | undefined => {
-    const value = storage.getString(key);
+  getString: async (key: string): Promise<string | null> => AsyncStorage.getItem(key),
+  setString: async (key: string, value: string): Promise<void> => {
+    await AsyncStorage.setItem(key, value);
+  },
+  getNumber: async (key: string): Promise<number | undefined> => {
+    const value = await AsyncStorage.getItem(key);
+    return value != null ? Number(value) : undefined;
+  },
+  setNumber: async (key: string, value: number): Promise<void> => {
+    await AsyncStorage.setItem(key, String(value));
+  },
+  getBoolean: async (key: string): Promise<boolean | undefined> => {
+    const value = await AsyncStorage.getItem(key);
+    return value != null ? value === 'true' : undefined;
+  },
+  setBoolean: async (key: string, value: boolean): Promise<void> => {
+    await AsyncStorage.setItem(key, String(value));
+  },
+  getObject: async <T>(key: string): Promise<T | undefined> => {
+    const value = await AsyncStorage.getItem(key);
     if (value) {
       try {
         return JSON.parse(value) as T;
@@ -38,9 +45,13 @@ export const storageHelpers = {
     }
     return undefined;
   },
-  setObject: <T>(key: string, value: T): void => {
-    storage.set(key, JSON.stringify(value));
+  setObject: async <T>(key: string, value: T): Promise<void> => {
+    await AsyncStorage.setItem(key, JSON.stringify(value));
   },
-  delete: (key: string): void => storage.delete(key),
-  clearAll: (): void => storage.clearAll(),
+  delete: async (key: string): Promise<void> => {
+    await AsyncStorage.removeItem(key);
+  },
+  clearAll: async (): Promise<void> => {
+    await AsyncStorage.clear();
+  },
 };

@@ -1,16 +1,19 @@
 import { Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { Platform } from 'react-native';
+import { useColors } from '@/src/theme';
 
 export default function TabLayout() {
+  const colors = useColors();
+
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: '#F97316',
-        tabBarInactiveTintColor: '#9CA3AF',
+        tabBarActiveTintColor: colors.tabActive,
+        tabBarInactiveTintColor: colors.tabInactive,
         tabBarStyle: {
-          backgroundColor: '#FFFFFF',
-          borderTopColor: '#E5E7EB',
+          backgroundColor: colors.surface,
+          borderTopColor: colors.border,
           borderTopWidth: 1,
           height: Platform.OS === 'ios' ? 88 : 64,
           paddingTop: 8,
@@ -21,10 +24,10 @@ export default function TabLayout() {
           fontWeight: '500',
         },
         headerStyle: {
-          backgroundColor: '#FFFFFF',
+          backgroundColor: colors.surface,
         },
         headerTitleStyle: {
-          color: '#1F2937',
+          color: colors.text,
           fontWeight: '600',
           fontSize: 18,
         },
@@ -39,6 +42,20 @@ export default function TabLayout() {
           tabBarIcon: ({ color, focused }) => (
             <Ionicons
               name={focused ? 'home' : 'home-outline'}
+              size={24}
+              color={color}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="ai-chef"
+        options={{
+          title: 'AI Chef',
+          headerShown: false,
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons
+              name={focused ? 'sparkles' : 'sparkles-outline'}
               size={24}
               color={color}
             />
@@ -62,11 +79,26 @@ export default function TabLayout() {
       <Tabs.Screen
         name="cookbooks"
         options={{
+          href: null,
           title: 'Cookbooks',
           headerTitle: 'My Cookbooks',
           tabBarIcon: ({ color, focused }) => (
             <Ionicons
               name={focused ? 'book' : 'book-outline'}
+              size={24}
+              color={color}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="meal-planner"
+        options={{
+          title: 'Planner',
+          headerShown: false,
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons
+              name={focused ? 'calendar' : 'calendar-outline'}
               size={24}
               color={color}
             />

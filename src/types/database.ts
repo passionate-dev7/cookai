@@ -33,7 +33,7 @@ export interface Recipe {
   cookbook_id: string | null;
   title: string;
   description: string | null;
-  source_type: 'video' | 'cookbook' | 'manual' | 'url';
+  source_type: 'video' | 'cookbook' | 'manual' | 'url' | 'ai';
   source_url: string | null;
   source_platform: 'tiktok' | 'instagram' | 'youtube' | 'other' | null;
   image_url: string | null;
@@ -142,6 +142,45 @@ export interface Subscription {
   updated_at: string;
 }
 
+export interface CookingLog {
+  id: string;
+  user_id: string;
+  recipe_id: string;
+  cooked_at: string;
+  notes: string | null;
+  created_at: string;
+}
+
+export interface CookingLogPhoto {
+  id: string;
+  cooking_log_id: string;
+  photo_url: string;
+  order_index: number;
+  created_at: string;
+}
+
+export interface RecipeComment {
+  id: string;
+  recipe_id: string;
+  user_id: string;
+  content: string;
+  parent_comment_id: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CookingLogWithPhotos extends CookingLog {
+  photos: CookingLogPhoto[];
+}
+
+export interface RecipeCommentWithProfile extends RecipeComment {
+  profiles: {
+    full_name: string | null;
+    avatar_url: string | null;
+  } | null;
+  replies?: RecipeCommentWithProfile[];
+}
+
 export interface Database {
   public: {
     Views: Record<string, never>;
@@ -213,6 +252,24 @@ export interface Database {
         Row: Subscription;
         Insert: Omit<Subscription, 'id' | 'created_at' | 'updated_at'>;
         Update: Partial<Omit<Subscription, 'id' | 'user_id' | 'created_at'>>;
+        Relationships: [];
+      };
+      cooking_logs: {
+        Row: CookingLog;
+        Insert: Omit<CookingLog, 'id' | 'created_at'>;
+        Update: Partial<Omit<CookingLog, 'id' | 'user_id' | 'created_at'>>;
+        Relationships: [];
+      };
+      cooking_log_photos: {
+        Row: CookingLogPhoto;
+        Insert: Omit<CookingLogPhoto, 'id' | 'created_at'>;
+        Update: Partial<Omit<CookingLogPhoto, 'id' | 'created_at'>>;
+        Relationships: [];
+      };
+      recipe_comments: {
+        Row: RecipeComment;
+        Insert: Omit<RecipeComment, 'id' | 'created_at' | 'updated_at'>;
+        Update: Partial<Omit<RecipeComment, 'id' | 'user_id' | 'created_at'>>;
         Relationships: [];
       };
     };

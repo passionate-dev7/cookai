@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import {
   View,
   Text,
@@ -8,31 +8,42 @@ import {
   Share,
   Alert,
   Dimensions,
+  Modal,
+  ActivityIndicator,
 } from 'react-native';
-import { useLocalSearchParams, useRouter, Stack } from 'expo-router';
+import { useLocalSearchParams, useRouter, Stack, useFocusEffect } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as Haptics from 'expo-haptics';
-import { useRecipeStore, useGroceryStore } from '@/src/stores';
-import { Button, Card, LoadingSpinner } from '@/src/shared/components';
+import { useRecipeStore, useGroceryStore, useCommentStore, useTasteProfileStore } from '@/src/stores';
+import { Button, Card, LoadingSpinner, CookingMemories, CommentSection } from '@/src/shared/components';
+import { getSubstitutions, SubstitutionResult } from '@/src/services/ai';
 
 const { width } = Dimensions.get('window');
+
+type TabType = 'ingredients' | 'instructions' | 'discussion';
 
 export default function RecipeDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState<'ingredients' | 'instructions'>('ingredients');
+  const [activeTab, setActiveTab] = useState<TabType>('ingredients');
+  const [substitutionModal, setSubstitutionModal] = useState(false);
+  const [substitutionLoading, setSubstitutionLoading] = useState(false);
+  const [substitutionResult, setSubstitutionResult] = useState<SubstitutionResult | null>(null);
+  const trackInteraction = useTasteProfileStore((s) => s.trackInteraction);
 
   const {
     selectedRecipe,
     fetchRecipeWithIngredients,
     toggleFavorite,
-    incrementCookCount,
     deleteRecipe,
     setSelectedRecipe,
   } = useRecipeStore();
 
   const { activeList, createList, addRecipeToList } = useGroceryStore();
+  const unreadCounts = useCommentStore((s) => s.unreadCounts);
+  const resetUnreadCount = useCommentStore((s) => s.resetUnreadCount);
+  const unreadCount = id ? unreadCounts[id] || 0 : 0;
 
   useEffect(() => {
     if (id) {
@@ -43,6 +54,13 @@ export default function RecipeDetailScreen() {
       setSelectedRecipe(null);
     };
   }, [id]);
+
+  // Reset unread when Discussion tab is active
+  useEffect(() => {
+    if (activeTab === 'discussion' && id) {
+      resetUnreadCount(id);
+    }
+  }, [activeTab, id]);
 
   const handleShare = async () => {
     if (!selectedRecipe) return;
@@ -61,13 +79,48 @@ export default function RecipeDetailScreen() {
     if (!selectedRecipe) return;
     toggleFavorite(selectedRecipe.id);
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    // Track taste interaction
+    trackInteraction({
+      type: selectedRecipe.is_favorite ? 'unfavorite' : 'favorite',
+      recipeId: selectedRecipe.id,
+      cuisine: selectedRecipe.cuisine || undefined,
+      ingredients: selectedRecipe.ingredients?.map((i) => i.name),
+      tags: selectedRecipe.tags,
+      difficulty: selectedRecipe.difficulty || undefined,
+    });
+  };
+
+  const handleSubstitution = async (ingredientName: string) => {
+    if (!selectedRecipe) return;
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    setSubstitutionModal(true);
+    setSubstitutionLoading(true);
+    setSubstitutionResult(null);
+
+    const result = await getSubstitutions(ingredientName, {
+      recipeTitle: selectedRecipe.title,
+      allIngredients: selectedRecipe.ingredients?.map((i) => i.name) || [],
+      instructions: selectedRecipe.instructions || [],
+    });
+
+    setSubstitutionResult(result);
+    setSubstitutionLoading(false);
   };
 
   const handleCookNow = () => {
     if (!selectedRecipe) return;
-    incrementCookCount(selectedRecipe.id);
-    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-    Alert.alert('Marked as Cooked', 'This recipe has been marked as cooked!');
+    router.push({
+      pathname: '/(modals)/cooking-log',
+      params: { recipeId: selectedRecipe.id },
+    });
+  };
+
+  const handleVoiceCooking = () => {
+    if (!selectedRecipe) return;
+    router.push({
+      pathname: '/(modals)/voice-cooking',
+      params: { recipeId: selectedRecipe.id },
+    });
   };
 
   const handleAddToGroceryList = async () => {
@@ -150,7 +203,7 @@ export default function RecipeDetailScreen() {
             />
           ) : (
             <LinearGradient
-              colors={['#FFF7ED', '#FFEDD5']}
+              colors={['#E8EDE4', '#D5E0CF']}
               style={{
                 width,
                 height: 280,
@@ -158,7 +211,7 @@ export default function RecipeDetailScreen() {
                 justifyContent: 'center',
               }}
             >
-              <Ionicons name="restaurant-outline" size={64} color="#FDBA74" />
+              <Ionicons name="restaurant-outline" size={64} color="#6B7F5E" />
             </LinearGradient>
           )}
           <LinearGradient
@@ -245,7 +298,7 @@ export default function RecipeDetailScreen() {
             </Card>
           </View>
 
-          {/* Tab Switcher */}
+          {/* Tab Switcher - 3 tabs */}
           <View
             style={{
               flexDirection: 'row',
@@ -266,7 +319,7 @@ export default function RecipeDetailScreen() {
             >
               <Text
                 style={{
-                  fontSize: 15,
+                  fontSize: 14,
                   fontWeight: '600',
                   color: activeTab === 'ingredients' ? '#1F2937' : '#6B7280',
                   textAlign: 'center',
@@ -286,7 +339,7 @@ export default function RecipeDetailScreen() {
             >
               <Text
                 style={{
-                  fontSize: 15,
+                  fontSize: 14,
                   fontWeight: '600',
                   color: activeTab === 'instructions' ? '#1F2937' : '#6B7280',
                   textAlign: 'center',
@@ -295,14 +348,36 @@ export default function RecipeDetailScreen() {
                 Instructions ({selectedRecipe.instructions?.length || 0})
               </Text>
             </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => setActiveTab('discussion')}
+              style={{
+                flex: 1,
+                paddingVertical: 10,
+                borderRadius: 10,
+                backgroundColor: activeTab === 'discussion' ? '#FFFFFF' : 'transparent',
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 14,
+                  fontWeight: '600',
+                  color: activeTab === 'discussion' ? '#1F2937' : '#6B7280',
+                  textAlign: 'center',
+                }}
+              >
+                Discussion{unreadCount > 0 ? ` (${unreadCount})` : ''}
+              </Text>
+            </TouchableOpacity>
           </View>
 
           {/* Ingredients Tab */}
           {activeTab === 'ingredients' && (
             <View>
               {selectedRecipe.ingredients?.map((ing, index) => (
-                <View
+                <TouchableOpacity
                   key={ing.id || index}
+                  onPress={() => handleSubstitution(ing.name)}
+                  activeOpacity={0.7}
                   style={{
                     flexDirection: 'row',
                     alignItems: 'center',
@@ -316,7 +391,7 @@ export default function RecipeDetailScreen() {
                       width: 8,
                       height: 8,
                       borderRadius: 4,
-                      backgroundColor: '#F97316',
+                      backgroundColor: '#6B7F5E',
                       marginRight: 12,
                     }}
                   />
@@ -330,16 +405,17 @@ export default function RecipeDetailScreen() {
                     {ing.preparation ? `, ${ing.preparation}` : ''}
                   </Text>
                   {ing.is_optional && (
-                    <Text style={{ fontSize: 12, color: '#9CA3AF' }}>optional</Text>
+                    <Text style={{ fontSize: 12, color: '#9CA3AF', marginRight: 8 }}>optional</Text>
                   )}
-                </View>
+                  <Ionicons name="swap-horizontal-outline" size={16} color="#D1D5DB" />
+                </TouchableOpacity>
               ))}
               <Button
                 title="Add to Grocery List"
                 onPress={handleAddToGroceryList}
                 variant="outline"
                 fullWidth
-                icon={<Ionicons name="cart-outline" size={18} color="#F97316" />}
+                icon={<Ionicons name="cart-outline" size={18} color="#6B7F5E" />}
                 style={{ marginTop: 16 }}
               />
             </View>
@@ -363,13 +439,13 @@ export default function RecipeDetailScreen() {
                       width: 32,
                       height: 32,
                       borderRadius: 16,
-                      backgroundColor: '#FFF7ED',
+                      backgroundColor: '#E8EDE4',
                       alignItems: 'center',
                       justifyContent: 'center',
                       marginRight: 12,
                     }}
                   >
-                    <Text style={{ fontSize: 14, fontWeight: '600', color: '#F97316' }}>
+                    <Text style={{ fontSize: 14, fontWeight: '600', color: '#6B7F5E' }}>
                       {index + 1}
                     </Text>
                   </View>
@@ -381,8 +457,13 @@ export default function RecipeDetailScreen() {
             </View>
           )}
 
-          {/* Notes */}
-          {selectedRecipe.notes && (
+          {/* Discussion Tab */}
+          {activeTab === 'discussion' && id && (
+            <CommentSection recipeId={id} />
+          )}
+
+          {/* Notes - shown on ingredients/instructions tabs */}
+          {activeTab !== 'discussion' && selectedRecipe.notes && (
             <Card variant="outlined" padding="md" style={{ marginTop: 24 }}>
               <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
                 <Ionicons name="document-text-outline" size={18} color="#6B7280" />
@@ -396,19 +477,170 @@ export default function RecipeDetailScreen() {
             </Card>
           )}
 
-          {/* Action Buttons */}
-          <View style={{ marginTop: 24, gap: 12 }}>
-            <Button title="Mark as Cooked" onPress={handleCookNow} fullWidth />
-            <Button
-              title="Delete Recipe"
-              onPress={handleDelete}
-              variant="ghost"
-              fullWidth
-              textStyle={{ color: '#EF4444' }}
-            />
-          </View>
+          {/* Cooking Memories - shown on ingredients/instructions tabs */}
+          {activeTab !== 'discussion' && id && (
+            <CookingMemories recipeId={id} />
+          )}
+
+          {/* Action Buttons - shown on ingredients/instructions tabs */}
+          {activeTab !== 'discussion' && (
+            <View style={{ marginTop: 24, gap: 12 }}>
+              {selectedRecipe.instructions && selectedRecipe.instructions.length > 0 && (
+                <TouchableOpacity
+                  onPress={handleVoiceCooking}
+                  activeOpacity={0.8}
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    backgroundColor: '#1F2937',
+                    borderRadius: 12,
+                    paddingVertical: 16,
+                    gap: 10,
+                  }}
+                >
+                  <Ionicons name="mic-outline" size={22} color="#FFFFFF" />
+                  <Text style={{ fontSize: 16, fontWeight: '700', color: '#FFFFFF' }}>
+                    Start Voice Cooking
+                  </Text>
+                </TouchableOpacity>
+              )}
+              <Button title="Mark as Cooked" onPress={handleCookNow} fullWidth />
+              <Button
+                title="Delete Recipe"
+                onPress={handleDelete}
+                variant="ghost"
+                fullWidth
+                textStyle={{ color: '#EF4444' }}
+              />
+            </View>
+          )}
         </View>
       </ScrollView>
+
+      {/* Substitution Modal */}
+      <Modal
+        visible={substitutionModal}
+        animationType="slide"
+        presentationStyle="pageSheet"
+        onRequestClose={() => setSubstitutionModal(false)}
+      >
+        <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
+          {/* Modal Header */}
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              paddingHorizontal: 20,
+              paddingTop: 16,
+              paddingBottom: 12,
+              borderBottomWidth: 1,
+              borderBottomColor: '#F3F4F6',
+            }}
+          >
+            <Text style={{ fontSize: 18, fontWeight: '700', color: '#1F2937' }}>
+              Substitutions
+            </Text>
+            <TouchableOpacity onPress={() => setSubstitutionModal(false)}>
+              <Ionicons name="close" size={24} color="#6B7280" />
+            </TouchableOpacity>
+          </View>
+
+          <ScrollView style={{ flex: 1, padding: 20 }}>
+            {substitutionLoading ? (
+              <View style={{ alignItems: 'center', paddingVertical: 60 }}>
+                <ActivityIndicator size="large" color="#6B7F5E" />
+                <Text style={{ fontSize: 15, color: '#6B7280', marginTop: 16 }}>
+                  Finding substitutions...
+                </Text>
+              </View>
+            ) : substitutionResult ? (
+              <View>
+                {/* Original Ingredient Role */}
+                <View
+                  style={{
+                    backgroundColor: '#E8EDE4',
+                    borderRadius: 12,
+                    padding: 16,
+                    marginBottom: 20,
+                  }}
+                >
+                  <Text style={{ fontSize: 16, fontWeight: '700', color: '#1F2937', marginBottom: 4 }}>
+                    {substitutionResult.ingredient}
+                  </Text>
+                  <Text style={{ fontSize: 14, color: '#6B7280', lineHeight: 20 }}>
+                    Role: {substitutionResult.role}
+                  </Text>
+                </View>
+
+                {/* Substitution Cards */}
+                {substitutionResult.substitutions.map((sub, idx) => (
+                  <View
+                    key={idx}
+                    style={{
+                      backgroundColor: '#F9FAFB',
+                      borderRadius: 12,
+                      padding: 16,
+                      marginBottom: 12,
+                      borderWidth: 1,
+                      borderColor: '#E5E7EB',
+                    }}
+                  >
+                    <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
+                      <Ionicons name="swap-horizontal" size={18} color="#6B7F5E" />
+                      <Text style={{ fontSize: 16, fontWeight: '600', color: '#1F2937', marginLeft: 8 }}>
+                        {sub.substitute}
+                      </Text>
+                    </View>
+                    <Text style={{ fontSize: 14, color: '#6B7280', marginBottom: 8 }}>
+                      Ratio: {sub.ratio}
+                    </Text>
+                    <View style={{ flexDirection: 'row', gap: 8, marginBottom: 8 }}>
+                      <View
+                        style={{
+                          backgroundColor: '#DBEAFE',
+                          paddingHorizontal: 8,
+                          paddingVertical: 4,
+                          borderRadius: 6,
+                        }}
+                      >
+                        <Text style={{ fontSize: 12, color: '#1D4ED8' }}>
+                          Flavor: {sub.flavorImpact}
+                        </Text>
+                      </View>
+                      <View
+                        style={{
+                          backgroundColor: '#F3E8FF',
+                          paddingHorizontal: 8,
+                          paddingVertical: 4,
+                          borderRadius: 6,
+                        }}
+                      >
+                        <Text style={{ fontSize: 12, color: '#7C3AED' }}>
+                          Texture: {sub.textureImpact}
+                        </Text>
+                      </View>
+                    </View>
+                    {sub.notes && (
+                      <Text style={{ fontSize: 13, color: '#6B7280', fontStyle: 'italic', lineHeight: 18 }}>
+                        {sub.notes}
+                      </Text>
+                    )}
+                  </View>
+                ))}
+              </View>
+            ) : (
+              <View style={{ alignItems: 'center', paddingVertical: 60 }}>
+                <Ionicons name="warning-outline" size={40} color="#D1D5DB" />
+                <Text style={{ fontSize: 15, color: '#6B7280', marginTop: 12 }}>
+                  Could not find substitutions
+                </Text>
+              </View>
+            )}
+          </ScrollView>
+        </View>
+      </Modal>
     </>
   );
 }

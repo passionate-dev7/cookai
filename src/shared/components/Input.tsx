@@ -43,7 +43,7 @@ export function Input({
 
   const getBorderColor = () => {
     if (error) return '#EF4444';
-    if (isFocused) return '#F97316';
+    if (isFocused) return '#6B7F5E';
     return '#E5E7EB';
   };
 
@@ -75,7 +75,7 @@ export function Input({
           <Ionicons
             name={leftIcon}
             size={20}
-            color={isFocused ? '#F97316' : '#9CA3AF'}
+            color={isFocused ? '#6B7F5E' : '#9CA3AF'}
             style={{ marginRight: 8 }}
           />
         )}

@@ -112,15 +112,95 @@ export function extractVideoId(url: string, platform: SupportedPlatform): string
  * Get video transcript from backend
  */
 async function getVideoTranscript(url: string, platform: SupportedPlatform): Promise<string | null> {
-  try {
-    const { data, error } = await supabase.functions.invoke('get-video-transcript', {
-      body: { url, platform },
-    });
+  const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL;
+  const supabaseKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY;
 
-    if (error) throw error;
-    return data?.transcript || null;
-  } catch (error) {
-    console.error('Failed to get video transcript:', error);
+  // Try direct fetch to edge function (more reliable than supabase.functions.invoke)
+  if (supabaseUrl && supabaseKey) {
+    try {
+      console.log('[Extraction] Calling edge function directly...');
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 15000);
+
+      const res = await fetch(`${supabaseUrl}/functions/v1/get-video-transcript`, {
+        method: 'POST',
+        signal: controller.signal,
+        headers: {
+          'Authorization': `Bearer ${supabaseKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ url, platform }),
+      });
+      clearTimeout(timeout);
+
+      if (res.ok) {
+        const data = await res.json();
+        if (data?.transcript) {
+          console.log('[Extraction] Got transcript from edge function:', data.transcript.length, 'chars');
+          return data.transcript;
+        }
+      } else {
+        console.warn('[Extraction] Edge function returned:', res.status);
+      }
+    } catch (error) {
+      console.warn('[Extraction] Edge function error:', (error as Error)?.message);
+    }
+  }
+
+  // Fallback: fetch OG metadata directly
+  try {
+    const metadata = await fetchVideoMetadata(url);
+    if (metadata) {
+      console.log('[Extraction] Got metadata from direct fetch');
+      return metadata;
+    }
+  } catch {
+    // ignore
+  }
+
+  console.warn('[Extraction] No transcript or metadata available');
+  return null;
+}
+
+/**
+ * Fetch video metadata directly via OG tags (no edge function needed)
+ */
+async function fetchVideoMetadata(url: string): Promise<string | null> {
+  try {
+    // For YouTube, we can get transcript info from the oEmbed API
+    if (url.includes('youtube.com') || url.includes('youtu.be')) {
+      const oembedUrl = `https://www.youtube.com/oembed?url=${encodeURIComponent(url)}&format=json`;
+      const res = await fetch(oembedUrl);
+      if (res.ok) {
+        const data = await res.json();
+        return `Title: ${data.title}\nAuthor: ${data.author_name}`;
+      }
+    }
+
+    // For other platforms, try fetching the page and extracting OG tags
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 5000);
+    const res = await fetch(url, {
+      signal: controller.signal,
+      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; RecipeBot/1.0)' },
+    });
+    clearTimeout(timeout);
+
+    if (res.ok) {
+      const html = await res.text();
+      const titleMatch = html.match(/<meta[^>]*property="og:title"[^>]*content="([^"]*)"/) ||
+                         html.match(/<title>([^<]*)<\/title>/);
+      const descMatch = html.match(/<meta[^>]*property="og:description"[^>]*content="([^"]*)"/);
+
+      if (titleMatch || descMatch) {
+        const parts = [];
+        if (titleMatch) parts.push(`Title: ${titleMatch[1]}`);
+        if (descMatch) parts.push(`Description: ${descMatch[1]}`);
+        return parts.join('\n');
+      }
+    }
+    return null;
+  } catch {
     return null;
   }
 }

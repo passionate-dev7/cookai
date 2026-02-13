@@ -6,12 +6,16 @@ import { useFonts } from 'expo-font';
 import { StatusBar } from 'expo-status-bar';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useUserStore, useSubscriptionStore, useRecipeStore, useGroceryStore } from '@/src/stores';
+import { useThemeStore } from '@/src/theme';
 import '../global.css';
 
 LogBox.ignoreLogs([
   'RevenueCat',
   'Failed to fetch offerings',
   'There is an issue with your configuration',
+  'Failed to get video transcript',
+  'Transcript fetch skipped',
+  'FunctionsFetchError',
 ]);
 
 export { ErrorBoundary } from 'expo-router';
@@ -33,6 +37,7 @@ export default function RootLayout() {
   const fetchRecipes = useRecipeStore((state) => state.fetchRecipes);
   const fetchCookbooks = useRecipeStore((state) => state.fetchCookbooks);
   const fetchGroceryLists = useGroceryStore((state) => state.fetchLists);
+  const themeMode = useThemeStore((state) => state.mode);
 
   useEffect(() => {
     if (fontError) throw fontError;
@@ -73,7 +78,7 @@ export default function RootLayout() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <StatusBar style="dark" />
+      <StatusBar style={themeMode === 'dark' ? 'light' : 'dark'} />
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="(tabs)" />
         <Stack.Screen
@@ -82,7 +87,7 @@ export default function RootLayout() {
             presentation: 'modal',
             headerShown: true,
             headerTitle: 'Add Recipe',
-            headerTintColor: '#F97316',
+            headerTintColor: '#6B7F5E',
           }}
         />
         <Stack.Screen
@@ -91,7 +96,7 @@ export default function RootLayout() {
             presentation: 'modal',
             headerShown: true,
             headerTitle: 'Import from Video',
-            headerTintColor: '#F97316',
+            headerTintColor: '#6B7F5E',
           }}
         />
         <Stack.Screen
@@ -100,7 +105,7 @@ export default function RootLayout() {
             presentation: 'modal',
             headerShown: true,
             headerTitle: 'Add Cookbook',
-            headerTintColor: '#F97316',
+            headerTintColor: '#6B7F5E',
           }}
         />
         <Stack.Screen
@@ -108,6 +113,15 @@ export default function RootLayout() {
           options={{
             presentation: 'modal',
             headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="(modals)/cooking-log"
+          options={{
+            presentation: 'modal',
+            headerShown: true,
+            headerTitle: 'Log Your Cook',
+            headerTintColor: '#6B7F5E',
           }}
         />
         <Stack.Screen
@@ -121,6 +135,34 @@ export default function RootLayout() {
           name="(modals)/ocr-scanner"
           options={{
             presentation: 'fullScreenModal',
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="(modals)/snap-to-cook"
+          options={{
+            presentation: 'fullScreenModal',
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="(modals)/ai-generate"
+          options={{
+            presentation: 'modal',
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="(modals)/voice-cooking"
+          options={{
+            presentation: 'fullScreenModal',
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="(modals)/anti-waste"
+          options={{
+            presentation: 'modal',
             headerShown: false,
           }}
         />
@@ -139,7 +181,7 @@ export default function RootLayout() {
             headerShown: true,
             headerTitle: '',
             headerBackTitle: 'Back',
-            headerTintColor: '#F97316',
+            headerTintColor: '#6B7F5E',
           }}
         />
         <Stack.Screen
