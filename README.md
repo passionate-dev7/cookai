@@ -10,6 +10,10 @@ Transform any cooking video into a recipe you can actually cook. Scan cookbook p
 - **Smart Grocery Lists**: Auto-generate shopping lists from any recipe with intelligent ingredient merging
 - **Meal Planning**: Plan your weekly meals with a drag-and-drop calendar
 
+## Testing Instructions
+
+Reach out to shailendrasingh333537@gmail.com with a request for testing link.
+
 ## Tech Stack
 
 - **Framework**: Expo SDK 54 + Expo Router
@@ -19,8 +23,6 @@ Transform any cooking video into a recipe you can actually cook. Scan cookbook p
 - **Payments**: RevenueCat
 - **Barcode Scanning**: expo-camera
 - **OCR**: OpenRouter vision models
-
-## Getting Started
 
 ### Prerequisites
 
@@ -193,5 +195,5 @@ MIT License - see [LICENSE](LICENSE) for details.
 
 ## Support
 
-- Issues: [GitHub Issues](https://github.com/your-org/cookai/issues)
-- Email: support@cookai.app
+- Issues: [GitHub Issues](https://github.com/passionate-dev7/cookai/issues)
+- Email: shailendrasingh333537@gmail.com
